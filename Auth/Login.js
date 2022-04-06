@@ -7,7 +7,7 @@ import { Button } from "react-native-web";
 export default function Login({navigation}) {
     return(
         <View style={styles.container}>
-            <Text style={{fontSize: '25px', fontWeight:'600', marginBottom: '5%', color:'#ff3300'}}>Login</Text>
+            <Text style={{fontSize: '25px', fontWeight:'600', marginBottom: '5%', color:'#ff3300'}}>Loginjijijijijij</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email Address"

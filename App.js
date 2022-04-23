@@ -9,6 +9,7 @@ import Welcome from "./src/auth/Welcome";
 import Register from "./src/auth/Register";
 import ForgotPassword from "./src/auth/ForgotPassword";
 import Profile from "./src/pages/User/Profile";
+import Home from "./src/pages/home/Home";
 
 const Stack = createNativeStackNavigator()
 

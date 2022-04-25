@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
-// import { Icon } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import { StyleSheet, Text, View } from "react-native";
 
 import Home from "../../pages/home/Home";
@@ -31,7 +31,7 @@ const HomeNavigate = ({ navigation }) => {
           options={{
             title: "Home",
             tabBarLabelPosition: "below-icon",
-            // tabBarIcon: () => <Icon name="house" />,
+            tabBarIcon: () => <Icon name="house" />,
           }}
         />
       <Tab.Screen
@@ -40,7 +40,7 @@ const HomeNavigate = ({ navigation }) => {
         options={{
           title: "Support",
           tabBarLabelPosition: "below-icon",
-          // tabBarIcon: () => <Icon name="support" type="MaterialIcons" />,
+          tabBarIcon: () => <Icon name="support" type="MaterialIcons" />,
         }}
       />
 
@@ -50,7 +50,7 @@ const HomeNavigate = ({ navigation }) => {
         options={{
           title: "Cart",
           tabBarLabelPosition: "below-icon",
-          // tabBarIcon: () => <Icon name="shopping-cart" type="font-awesome" />,
+          tabBarIcon: () => <Icon name="shopping-cart" type="font-awesome" />,
         }}
       />
 
@@ -60,7 +60,7 @@ const HomeNavigate = ({ navigation }) => {
         options={{
           title: "Wishlist",
           tabBarLabelPosition: "below-icon",
-          // tabBarIcon: () => <Icon name="heart-o" type="font-awesome" />,
+          tabBarIcon: () => <Icon name="heart-o" type="font-awesome" />,
         }}
       />
 
@@ -70,7 +70,7 @@ const HomeNavigate = ({ navigation }) => {
         options={{
           title: "Setting",
           tabBarLabelPosition: "below-icon",
-          // tabBarIcon: () => <Icon name="settings" type="feather" />,
+          tabBarIcon: () => <Icon name="settings" type="feather" />,
         }}
       />
     </Tab.Navigator>

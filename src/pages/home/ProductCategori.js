@@ -1,12 +1,13 @@
 import { Text, View, StyleSheet, Image, ImageBackground } from 'react-native';
 import { Link } from 'react-router-native';
+import { Icon } from "@rneui/themed";
 
 const ProCategori = (props) => {
   return(
     <View style={styles.product}>
       {/* <Image source={require('../../assets/icon.png')} style={styles.imgProduct} /> */}
       {/* them icon cho tung the loai sna pham */}
-      <Text>{props.icon}</Text>
+      <Icon name={props.icon.name} color={props.icon.color} type={props.icon.type} />
       <Text style={styles.namePro}>{props.name}</Text>
     </View>
   );
@@ -18,14 +19,14 @@ export default function ProductCategori () {
       <Text style={styles.title}>Products Categori</Text>
 
       <View style={styles.flex}>
-        <ProCategori icon="đây là thẻ icon phone" name="Phone" />
-        <ProCategori icon="đây là thẻ icon laptop" name="Laptop" />
-        <ProCategori icon="đây là thẻ icon refrigeration" name="Refrigeration" />
+        <ProCategori icon={{ name:"mobile-phone", type: "font-awesome", color: "#FF6600" }} name="Phone" />
+        <ProCategori icon={{ name:"laptop", type: "font-awesome", color: "#3399FF" }} name="Laptop" />
+        <ProCategori icon={{ name:"fridge", type: "material-community", color: "#FF3300" }} name="Refrigeration" />
       </View>
       <View style={styles.flex}>
-        <ProCategori icon="dây là icon camera" name="Camera" />
-        <ProCategori icon="đây là icon IPAD" name="Ipad" />
-        <ProCategori icon="đây là icon Accessory" name="Accessory" />
+        <ProCategori icon={{ name:"camera", type: "font-awesome", color: "#33CC33" }} name="Camera" />
+        <ProCategori icon={{ name:"tablet", type: "font-awesome", color: "#003333" }} name="Ipad" />
+        <ProCategori icon={{ name:"gamepad", type: "font-awesome", color: "#3399FF" }} name="Accessory" />
       </View>
     </View>
   );
@@ -33,11 +34,11 @@ export default function ProductCategori () {
 
 const styles = StyleSheet.create({
   box: {
-    marginLeft: '5%'
+    marginLeft: 15,
   },
 
   title: {
-    fontSize: '20px',
+    fontSize: 20,
     fontWeight: '600',
     marginTop: '3%'
   },
@@ -51,18 +52,18 @@ const styles = StyleSheet.create({
     marginRight: '2%',
     width: '30%',
     backgroundColor: '#fff',
-    borderRadius: '10px',
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems:'center'
   },
 
   namePro: {
-    fontSize: '15px',
+    fontSize: 15,
     fontWeight: '500',
     marginBottom: '5%'
   },
   imgProduct: {
-    width: '100px',
-    height:'100px'
+    width: 100,
+    height:100
   }
 });

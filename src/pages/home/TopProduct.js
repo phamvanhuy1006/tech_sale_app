@@ -1,4 +1,7 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, View, StyleSheet, Image, Button} from 'react-native';
+import ListProduct from '../product/ListProduct';
+import { Route, Link, NativeRouter } from 'react-router-native';
 
 const ProSale = (props) => {
   return(
@@ -13,28 +16,51 @@ const ProSale = (props) => {
   );
 }
 
-export default function TopProduct() {
+const Stack = createNativeStackNavigator()
+
+export default function TopProduct({ navigation }) {
+  const products = [
+    {
+      id:"1", name: "ten 1", number: "20"
+    },
+    {
+    name: "ten 2", number: "20",  id:"2"
+    },
+    {
+      name: "ten 3", number: "20",  id:"3"
+    },
+    {
+      name: "ten 4", number: "20",  id:"4"
+    },
+    {
+      name: "ten 3", number: "20",  id:"5"
+    },
+    {
+      name: "ten 4", number: "20",  id:"6"
+    }, {
+      name: "ten 3", number: "20", id:"7"
+    },
+    {
+      name: "ten 4", number: "20", id:"8" 
+    },
+  ]
   return(
     <View style={styles.box}>
       <Text style={styles.title}>Top Product</Text>
+
       <View style={styles.button}>
         <Button
           title="View All"
           color="#ff6600"
+          onPress={() => {
+            // điều hướng ra màn list product
+          }}
         />
       </View>
-
       <View style={styles.flex}>
-        <ProSale name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
-        <ProSale name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
-      </View>
-      <View style={styles.flex}>
-        <ProSale name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
-        <ProSale name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
-      </View>
-      <View style={styles.flex}>
-        <ProSale name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
-        <ProSale name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
+        {products.map(product =>([
+          <ProSale key={product.id} name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
+        ]))}
       </View>
     </View>
   );
@@ -56,6 +82,7 @@ const styles = StyleSheet.create({
   flex: {
     flexDirection: 'row',
     marginTop: '6%',
+    flexWrap: 'wrap'
   },
 
   product: {
@@ -66,7 +93,8 @@ const styles = StyleSheet.create({
     marginRight: '2%',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative'
+    position: 'relative',
+    marginTop: '5%'
   },
 
   imgPro: {

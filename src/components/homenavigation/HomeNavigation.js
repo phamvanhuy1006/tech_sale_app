@@ -26,14 +26,14 @@ const HomeNavigate = ({ navigation }) => {
       }}
     >
       <Tab.Screen
-          name="home"
-          component={Home}
-          options={{
-            title: "Home",
-            tabBarLabelPosition: "below-icon",
-            // tabBarIcon: () => <Icon name="house" />,
-          }}
-        />
+        name="home"
+        component={Home}
+        options={{
+          title: "Home",
+          tabBarLabelPosition: "below-icon",
+          // tabBarIcon: () => <Icon name="house" />,
+        }}
+      />
       <Tab.Screen
         name="support"
         component={Support}

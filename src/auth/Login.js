@@ -25,6 +25,7 @@ export default function Login({ navigation }) {
           title="Login"
           onPress={() => {
             navigation.navigate("homenavigate");
+            // navigation.navigate("ListProduct");
           }}
         />
       </View>

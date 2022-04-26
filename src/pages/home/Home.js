@@ -3,10 +3,12 @@ import ProductCategori from './ProductCategori';
 import FlashSale from './FlashSale';
 import TopProduct from './TopProduct';
 import BottomHome from './BottomHome';
+import Slide from './Slide';
 
-export default function Home () {
+export default function Home ({navigation}) {
   return (
     <ScrollView style={styles.container}>
+      <Slide />
       <ProductCategori />
       <FlashSale />
       <TopProduct />

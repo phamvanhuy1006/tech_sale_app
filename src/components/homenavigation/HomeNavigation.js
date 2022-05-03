@@ -1,18 +1,30 @@
+import React, { useRef, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import { Icon } from "@rneui/themed";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, DrawerLayoutAndroid, Text, StyleSheet, View } from "react-native";
 
-import Home from "../../pages/home/Home";
-import Cart from "../../pages/cart/Cart";
-import Support from "../../pages/support/Support";
-import Wishlist from "../../pages/wishlist/Wishlist";
-import Setting from "../../pages/setting/Setting";
+import { Home } from '../pages/home';
+import { Support } from "../pages/support";
+import { Wishlist } from "../pages/wishlist";
+import { Setting } from "../pages/setting";
+import { Cart } from "../pages/cart";
+import { Header } from "./Header";
+import { Menu } from "./Menu";
 
 const Tab = createBottomTabNavigator()
 
-const HomeNavigate = ({ navigation }) => {
+const HomeNavigation = ({ navigation }) => {
+
+  const drawer = useRef(null);
+
   return (
+    <DrawerLayoutAndroid
+      ref={drawer}
+      drawerWidth={300}
+      drawerPosition="left"
+      renderNavigationView={() => <Menu navigation={navigation} drawer={drawer} />}
+    >
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: { position: "absolute" },
@@ -29,7 +41,7 @@ const HomeNavigate = ({ navigation }) => {
           name="home"
           component={Home}
           options={{
-            title: "Home",
+            headerTitle: () => <Header drawer={drawer}/>,
             tabBarLabelPosition: "below-icon",
             tabBarIcon: () => <Icon name="house" />,
           }}
@@ -74,7 +86,25 @@ const HomeNavigate = ({ navigation }) => {
         }}
       />
     </Tab.Navigator>
+    </DrawerLayoutAndroid>
   );
 };
 
-export default HomeNavigate
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16
+  },
+  navigationContainer: {
+    backgroundColor: "#ecf0f1"
+  },
+  paragraph: {
+    padding: 16,
+    fontSize: 15,
+    textAlign: "center"
+  }
+});
+
+export { HomeNavigation }

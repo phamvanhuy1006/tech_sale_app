@@ -1,35 +1,60 @@
-import { Button, DrawerLayoutAndroid, Text, StyleSheet, View } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import { Button, DrawerLayoutAndroid, Text, StyleSheet, View, Image } from "react-native"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { MenuNavigation } from './MenuNavigation'
 const Stack = createNativeStackNavigator()
 
 const Menu = ({ navigation, drawer }) => {
   // console.log(navigation)
   return (
     <View style={[styles.container, styles.navigationContainer]}>
-    <Text style={styles.paragraph}>I'm in the Drawer!</Text>
-    <Button
-      title="Close drawer"
-      onPress={() => drawer.current.closeDrawer()}
-    />
-  </View>
+      <View style={styles.borderImage}>
+        <Image 
+          source={{uri: 'https://reactnative.dev/docs/assets/p_cat2.png'}}
+          style={styles.image}
+        />
+      </View>
+      <Button
+        title="Close drawer"
+        // onPress={() => drawer.current.closeDrawer()}
+      />
+
+      <View style={styles.menuNavigation}>
+        <MenuNavigation icon={{ name: "account-circle", type:"MaterialIcons" }} name="My Profile" onPress={() => { navigation.navigate('Profile') }} />
+        <MenuNavigation icon={{ name: "notifications", type:"MaterialIcons" }} name="Notification" onPress={() => { navigation.navigate('Register') }} />
+        <MenuNavigation icon={{ name: "lock", type:"EvilIcons" }} name="ChangePass" onPress={() => { navigation.navigate('Register') }} />
+        <MenuNavigation icon={{ name: "newspaper-o", type:"font-awesome" }} name="My orders" onPress={() => { navigation.navigate('Register') }} />
+        <MenuNavigation icon={{ name: "settings", type:"MaterialIcons" }} name="Settings" onPress={() => { navigation.navigate('Register') }} />
+        <MenuNavigation icon={{ name: "sign-out", type:"font-awesome" }} name="Sign Out" onPress={() => { navigation.navigate('Register') }} />
+      </View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16
+    // justifyContent: "center",
+    padding: 16,
   },
   navigationContainer: {
-    backgroundColor: "#ecf0f1"
+    backgroundColor: "#0066FF"
   },
   paragraph: {
     padding: 16,
     fontSize: 15,
     textAlign: "center"
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    backgroundColor: "grey"
+  },
+  borderImage: {
+    alignItems: "center",
   }
 });
 

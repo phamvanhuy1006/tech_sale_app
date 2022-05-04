@@ -4,11 +4,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { HomeNavigation } from './components/homenavigation';
-import { Login } from "./components//auth";
-import { Welcome } from "./components//auth";
-import { Register } from "./components//auth";
-import { ForgotPassword } from "./components//auth";
-// import { Profile } from "./components/pages/user/Profile";
+import { Login } from "./components/auth";
+import { Welcome } from "./components/auth";
+import { Register } from "./components/auth";
+import { ForgotPassword } from "./components/auth";
+import { Profile } from "./components/pages/user";
 
 const Stack = createNativeStackNavigator()
 const TechApp = () => {
@@ -47,13 +47,13 @@ const TechApp = () => {
           }}
         />
 
-        {/*<Stack.Screen
+        <Stack.Screen
           name="Profile"
           component={Profile}
           options={{
             title: "Profile",
           }}
-        />*/}
+        />
 
         <Stack.Screen
           name="Homenavigate"

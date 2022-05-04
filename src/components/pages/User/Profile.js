@@ -17,7 +17,7 @@ const Profile = (props) => {
                 <View>
                     <Image
                         style={styles.avatar}
-                        source={require('../../assets/cr7.jpeg')}
+                        source={require('../../../assets/cr7.jpeg')}
                     />
                 </View>
                 <View style={{ marginLeft: 10 }}>

@@ -18,6 +18,7 @@ i18n
     .use(Backend)
     .use(initReactI18next)
     .init({
+        compatibilityJSON: 'v3',
         resources,                                                                                                                                                                                                        
         fallbackLng: 'en',
         // debug: true,

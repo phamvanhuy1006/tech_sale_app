@@ -15,11 +15,11 @@ const Menu = ({ navigation, drawer }) => {
       </View>
       <Button
         title="Close drawer"
-        // onPress={() => drawer.current.closeDrawer()}
+        onPress={() => drawer.current.closeDrawer()}
       />
 
       <View style={styles.menuNavigation}>
-        <MenuNavigation icon={{ name: "account-circle", type:"MaterialIcons" }} name="My Profile" onPress={() => { navigation.navigate('Profile') }} />
+        <MenuNavigation icon={{ name: "account-circle", type:"MaterialIcons" }} name="My Profile" onPress={() => { [navigation.navigate('ShowProfile'), drawer.current.closeDrawer()] }} />
         <MenuNavigation icon={{ name: "notifications", type:"MaterialIcons" }} name="Notification" onPress={() => { navigation.navigate('Register') }} />
         <MenuNavigation icon={{ name: "lock", type:"EvilIcons" }} name="ChangePass" onPress={() => { navigation.navigate('Register') }} />
         <MenuNavigation icon={{ name: "newspaper-o", type:"font-awesome" }} name="My orders" onPress={() => { navigation.navigate('Register') }} />

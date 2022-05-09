@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { HomeNavigation } from './components/homenavigation';
+import { AppNavigation } from './components/homenavigation';
 import { Login } from "./components/auth";
 import { Welcome } from "./components/auth";
 import { Register } from "./components/auth";
@@ -52,12 +52,13 @@ const TechApp = () => {
           component={Profile}
           options={{
             title: "Profile",
+            headerShown: false
           }}
         />
 
         <Stack.Screen
           name="Homenavigate"
-          component={HomeNavigation}
+          component={AppNavigation}
           options={{
             title: "Profile",
             headerShown: false

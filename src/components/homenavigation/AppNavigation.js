@@ -4,7 +4,7 @@ import { BlurView } from "expo-blur";
 import { Icon } from "@rneui/themed";
 import { Button, DrawerLayoutAndroid, Text, StyleSheet, View } from "react-native";
 
-import { Home } from '../pages/home';
+import { HomeNavigation } from '../pages/home';
 import { Support } from "../pages/support";
 import { Wishlist } from "../pages/wishlist";
 import { Setting } from "../pages/setting";
@@ -14,7 +14,7 @@ import { Menu } from "./Menu";
 
 const Tab = createBottomTabNavigator()
 
-const HomeNavigation = ({ navigation }) => {
+const AppNavigation = ({ navigation }) => {
 
   const drawer = useRef(null);
 
@@ -38,8 +38,8 @@ const HomeNavigation = ({ navigation }) => {
       }}
     >
       <Tab.Screen
-          name="home"
-          component={Home}
+          name="homeNavigation"
+          component={HomeNavigation}
           options={{
             headerTitle: () => <Header drawer={drawer}/>,
             tabBarLabelPosition: "below-icon",
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { HomeNavigation }
+export { AppNavigation }

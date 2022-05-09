@@ -8,7 +8,7 @@ import { Login } from "./components/auth";
 import { Welcome } from "./components/auth";
 import { Register } from "./components/auth";
 import { ForgotPassword } from "./components/auth";
-import { Profile } from "./components/pages/user";
+import { Profile } from "./components/pages/User";
 
 const Stack = createNativeStackNavigator()
 const TechApp = () => {
@@ -80,6 +80,8 @@ const TechApp = () => {
           </Routes>
         </NativeRouter> */}
     </NavigationContainer>
+
+    // <Cart />
   );
 }
 

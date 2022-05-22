@@ -80,6 +80,8 @@ const TechApp = () => {
           </Routes>
         </NativeRouter> */}
     </NavigationContainer>
+
+    // <Cart />
   );
 }
 

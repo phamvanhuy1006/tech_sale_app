@@ -1,10 +1,70 @@
 import React from "react";
-
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { request } from "~/lib";
+import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Loading } from "~/components/Loading";
 
 function Login({ navigation }) {
+  const [loading, setLoading] = React.useState(false);
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      value = await AsyncStorage.setItem("@user", jsonValue);
+      navigation.navigate("Homenavigate");
+      console.log("da dang nhap");
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  // email: "admin@gmail.com",
+  // password: "123",
+
+  const handleLogin = async () => {
+    await request
+      .post(`/api/login`, {
+        email: email,
+        password: password,
+      })
+      .then((res) =>
+        storeData({
+          id: 1,
+          password: "8Dnfhhq3Q9ze",
+          avatar: null,
+          background: null,
+          full_name: "Orelia Wilber",
+          phone: "(474) 4551200",
+          birthday: "2021-05-11T00:00:00",
+          gender: 2,
+          email: "owilber0@cbsnews.com",
+        })
+      )
+      .then(setLoading(false))
+      .catch((err) => {
+        [setLoading(false), Alert.alert(err.response.data.data)];
+      });
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@user");
+      if (value !== null) {
+        // value previously stored
+        // console.log(value)
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   return (
     <View style={styles.container}>
+      {loading ? <Loading /> : <View></View>}
+
       <Text
         style={{
           fontSize: 25,
@@ -15,31 +75,39 @@ function Login({ navigation }) {
       >
         Login
       </Text>
-      <TextInput style={styles.input} placeholder="Email Address" />
-
-      <TextInput style={styles.input} placeholder="Password" />
-
+      <TextInput
+        style={styles.input}
+        placeholder="Email Address"
+        onChangeText={(text) => setEmail(text)}
+        defaultValue={email}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        onChangeText={(text) => setPassword(text)}
+        defaultValue={password}
+      />
       <View style={styles.login}>
         <Button
           color="#339900"
           title="Login"
           onPress={() => {
-            navigation.navigate("Homenavigate");
+            return ([
+              setLoading(true), 
+              handleLogin()
+            ])
           }}
         />
       </View>
-
       <Button
         title="Forgot Password"
         onPress={() => {
           navigation.navigate("ForgotPass");
         }}
       />
-
       <View>
         <Text style={styles.linkregister}>
-          Didn't have an account?
-          <Text>Register Now</Text>
+          Didn 't have an account? <Text> Register Now </Text>
         </Text>
       </View>
     </View>
@@ -82,4 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Login }
+export { Login };

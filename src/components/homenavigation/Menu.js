@@ -1,15 +1,24 @@
-import { Button, DrawerLayoutAndroid, Text, StyleSheet, View, Image } from "react-native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { MenuNavigation } from './MenuNavigation'
-const Stack = createNativeStackNavigator()
+import {
+  Button,
+  DrawerLayoutAndroid,
+  Text,
+  StyleSheet,
+  View,
+  Image,
+} from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { MenuNavigation } from "./MenuNavigation";
+import { logout } from "~/lib";
+
+const Stack = createNativeStackNavigator();
 
 const Menu = ({ navigation, drawer }) => {
   // console.log(navigation)
   return (
     <View style={[styles.container, styles.navigationContainer]}>
       <View style={styles.borderImage}>
-        <Image 
-          source={{uri: 'https://reactnative.dev/docs/assets/p_cat2.png'}}
+        <Image
+          source={{ uri: "https://reactnative.dev/docs/assets/p_cat2.png" }}
           style={styles.image}
         />
       </View>
@@ -19,16 +28,52 @@ const Menu = ({ navigation, drawer }) => {
       />
 
       <View style={styles.menuNavigation}>
-        <MenuNavigation icon={{ name: "account-circle", type:"MaterialIcons" }} name="My Profile" onPress={() => { [navigation.navigate('ShowProfile'), drawer.current.closeDrawer()] }} />
-        <MenuNavigation icon={{ name: "notifications", type:"MaterialIcons" }} name="Notification" onPress={() => { navigation.navigate('Register') }} />
-        <MenuNavigation icon={{ name: "lock", type:"EvilIcons" }} name="ChangePass" onPress={() => { navigation.navigate('Register') }} />
-        <MenuNavigation icon={{ name: "newspaper-o", type:"font-awesome" }} name="My orders" onPress={() => { navigation.navigate('Register') }} />
-        <MenuNavigation icon={{ name: "settings", type:"MaterialIcons" }} name="Settings" onPress={() => { navigation.navigate('Register') }} />
-        <MenuNavigation icon={{ name: "sign-out", type:"font-awesome" }} name="Sign Out" onPress={() => { navigation.navigate('Register') }} />
+        <MenuNavigation
+          icon={{ name: "account-circle", type: "MaterialIcons" }}
+          name="My Profile"
+          onPress={() => {
+            [navigation.navigate("ShowProfile"), drawer.current.closeDrawer()];
+          }}
+        />
+        <MenuNavigation
+          icon={{ name: "notifications", type: "MaterialIcons" }}
+          name="Notification"
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        />
+        <MenuNavigation
+          icon={{ name: "lock", type: "EvilIcons" }}
+          name="ChangePass"
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        />
+        <MenuNavigation
+          icon={{ name: "newspaper-o", type: "font-awesome" }}
+          name="My orders"
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        />
+        <MenuNavigation
+          icon={{ name: "settings", type: "MaterialIcons" }}
+          name="Settings"
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        />
+        <MenuNavigation
+          icon={{ name: "sign-out", type: "font-awesome" }}
+          name="Sign Out"
+          onPress={() => {
+            return [logout(), navigation.navigate("Login")]
+          }}
+        />
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -37,12 +82,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   navigationContainer: {
-    backgroundColor: "#0066FF"
+    backgroundColor: "#0066FF",
   },
   paragraph: {
     padding: 16,
     fontSize: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   image: {
     width: 100,
@@ -51,11 +96,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
-    backgroundColor: "grey"
+    backgroundColor: "grey",
   },
   borderImage: {
     alignItems: "center",
-  }
+  },
 });
 
-export { Menu }
+export { Menu };

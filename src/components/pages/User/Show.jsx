@@ -5,16 +5,37 @@ import {
   Image,
   StyleSheet,
   Button,
-  TextInput,
   Alert,
+  TextInput,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
 import { Icon } from "@rneui/themed";
+import React from "react";
 
-import { UserInfoProfile, MyOrder, EditTextField } from "./UserInfoProfile";
+import { UserInfoProfile, MyOrder } from "./UserInfoProfile";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Edit = ({ navigation }) => {
+const Show = ({ navigation }) => {
+  const [user, setUser] = React.useState();
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@user");
+      if (value !== null) {
+        setUser(JSON.parse(value));
+        // console.log(value)
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  React.useEffect(() => {
+    getData();
+  }, []);
+
+  console.log(user);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -22,53 +43,59 @@ const Edit = ({ navigation }) => {
           <View>
             <Image
               style={styles.avatar}
-              source={require("../../../assets/cr7.jpeg")}
+              source={require("~/assets/cr7.jpeg")}
             />
           </View>
           <View style={{ marginLeft: 10 }}>
             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-              <Text style={styles.fullname}>Dinh Quang Tung</Text>
+              <Text style={styles.fullname}>{user?.full_name}</Text>
             </View>
             <Text style={styles.username}>tung123</Text>
           </View>
         </View>
 
         <View style={styles.middle}>
-          <EditTextField
-            icon={{ name: "user", type: "entypo" }}
-            name="Username"
-            placeholder=""
-            value=""
+          <UserInfoProfile
+            name="user"
+            type="entypo"
+            title="Username"
+            data="aloalo"
           />
-          <EditTextField
-            icon={{ name: "contacts", type: "material-community" }}
-            name="Fullname"
-            placeholder=""
-            value=""
+          <UserInfoProfile
+            name="contacts"
+            type="material-community"
+            title="Fullname"
+            data={user?.full_name}
           />
-          <EditTextField
-            icon={{ name: "phone", type: "font-awesome" }}
-            name="Phone"
-            placeholder=""
-            value=""
+          <UserInfoProfile
+            name="phone"
+            type="font-awesome"
+            title="Phone"
+            data={user?.phone}
           />
-          <EditTextField
-            icon={{ name: "email", type: "" }}
-            name="Email"
-            placeholder=""
-            value=""
+          <UserInfoProfile
+            name="email"
+            type=""
+            title="Email"
+            data={user?.email}
           />
-          <EditTextField
-            icon={{ name: "birthday-cake", type: "font-awesome" }}
-            name="Username"
-            placeholder=""
-            value=""
+          <UserInfoProfile
+            name="address"
+            type="entypo"
+            title="Address"
+            data="aloalo"
           />
-          <EditTextField
-            icon={{ name: "user", type: "entypo" }}
-            name="Username"
-            placeholder=""
-            value=""
+          <UserInfoProfile
+            name="birthday-cake"
+            type="font-awesome"
+            title="Birthday"
+            data={user?.birthday}
+          />
+          <UserInfoProfile
+            name="transgender"
+            type="font-awesome"
+            title="Gender"
+            data="aloalo"
           />
 
           <MyOrder
@@ -99,11 +126,10 @@ const Edit = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     paddingLeft: 10,
     paddingRight: 10,
     width: "100%",
-    height: "90%",
   },
   top: {
     flexDirection: "row",
@@ -152,4 +178,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Edit };
+export { Show };

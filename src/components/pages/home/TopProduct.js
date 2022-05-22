@@ -1,51 +1,46 @@
-import { Text, View, StyleSheet, Image, Button} from 'react-native';
-import { Product } from './Product';
+import { Text, View, StyleSheet, Image, Button } from "react-native";
+import { Product } from "./Product";
+import { request } from "~/lib";
+import { useState, useEffect } from "react";
 
 function TopProduct({ navigation }) {
+  const [products, setProducts] = useState([]);
 
-  const products = [
-    {
-      id:"1", name: "ten 1", number: "20"
-    },
-    {
-    name: "ten 2", number: "20",  id:"2"
-    },
-    {
-      name: "ten 3", number: "20",  id:"3"
-    },
-    {
-      name: "ten 4", number: "20",  id:"4"
-    },
-    {
-      name: "ten 3", number: "20",  id:"5"
-    },
-    {
-      name: "ten 4", number: "20",  id:"6"
-    }, {
-      name: "ten 3", number: "20", id:"7"
-    },
-    {
-      name: "ten 4", number: "20", id:"8" 
-    },
-  ]
+  useEffect(() => {
+    request
+      .get("/api/product")
+      .then((response) => setProducts(response.data.data));
+  });
 
-  return(
+  const salePrice = (price, sale) => {
+    return Math.round((Number(price) * Number(sale)) / 100);
+  };
+
+  const round = (rate) => {
+    return rate.toFixed(2);
+  };
+
+  return (
     <View style={styles.box}>
       <Text style={styles.title}>Top Product</Text>
-      <View style={styles.buttonView}>
-        <Button
-          title="View All"
-          color="#ff6600"
-          onPress={ () => navigation.navigate("Login") }
-        />
-      </View>
+      <View style={styles.buttonView}></View>
 
       <View style={styles.row}>
-        {products.map(product => ([
-          <View  key={product.id} style={styles.card}>
-            <Product name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
-          </View>
-        ]))}
+        {products.map((product) => [
+          <View key={product.id} style={styles.card}>
+            <Product
+              name={product?.name}
+              image={product.images}
+              salePrice={salePrice(product?.price, product?.flash_sale_percent)}
+              stock={product?.stock}
+              rate={round(product?.rate)}
+              price={product?.price}
+              salePercent={product?.flash_sale_percent}
+              id={product?.id}
+              navigation={navigation}
+            />
+          </View>,
+        ])}
       </View>
     </View>
   );
@@ -53,35 +48,36 @@ function TopProduct({ navigation }) {
 
 const styles = StyleSheet.create({
   box: {
-    marginLeft: '5%',
-    marginRight: '5%',
+    marginLeft: "5%",
+    marginRight: "5%",
     flex: 1,
-    marginTop: '5%',
-    marginBottom: '5%'
+    marginTop: "5%",
+    marginBottom: "5%",
   },
 
   title: {
     fontSize: 20,
-    fontWeight: '600',
-    marginTop: '3%'
+    fontWeight: "600",
+    marginTop: "3%",
   },
 
   flex: {
-    flexDirection: 'row',
-    marginTop: '6%',
+    flexDirection: "row",
+    marginTop: "6%",
   },
 
   row: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: '5%',
+    marginTop: "5%",
+    width: "100%",
   },
 
   buttonView: {
     width: 100,
-    position: 'absolute',
-    right: '5%',
-    top: '1%'
+    position: "absolute",
+    right: "5%",
+    top: "1%",
   },
   card: {
     paddingHorizontal: 8,
@@ -94,6 +90,6 @@ const styles = StyleSheet.create({
     maxWidth: "50%",
     textAlign: "center",
   },
-})
+});
 
-export { TopProduct }
+export { TopProduct };

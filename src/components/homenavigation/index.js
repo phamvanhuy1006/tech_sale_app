@@ -1,1 +1,1 @@
-export * from './HomeNavigation'
+export * from './AppNavigation'

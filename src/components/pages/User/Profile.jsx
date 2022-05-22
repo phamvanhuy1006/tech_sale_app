@@ -7,11 +7,9 @@ const Stack = createNativeStackNavigator()
 
 const Profile = () => {
   return (
-    // <ScrollView>
       <Stack.Navigator>
         <Stack.Screen name="EditProfile" component={Show} />
       </Stack.Navigator>
-    // </ScrollView>
   )
 }
 

@@ -4,16 +4,15 @@ import {
   Text,
   Image,
   StyleSheet,
-  Button,
-  Alert,
-  TextInput,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
 import { Icon } from "@rneui/themed";
+import { TAgender } from "~/constant/index";
 import React from "react";
 
 import { UserInfoProfile, MyOrder } from "./UserInfoProfile";
+import { formatDate } from "~/util/commonFunction";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Show = ({ navigation }) => {
@@ -24,10 +23,15 @@ const Show = ({ navigation }) => {
       const value = await AsyncStorage.getItem("@user");
       if (value !== null) {
         setUser(JSON.parse(value));
-        // console.log(value)
       }
-    } catch (e) {
-      // error reading value
+    } catch (e) {}
+  };
+  const getGender = (value) => {
+    const gender = TAgender.find((item) => item.value === value);
+    if (gender) {
+      return gender.content;
+    } else {
+      return "";
     }
   };
 
@@ -35,22 +39,18 @@ const Show = ({ navigation }) => {
     getData();
   }, []);
 
-  console.log(user);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.top}>
           <View>
-            <Image
-              style={styles.avatar}
-              source={require("~/assets/cr7.jpeg")}
-            />
+            <Image style={styles.avatar} source={{ uri: user?.avatar }} />
           </View>
           <View style={{ marginLeft: 10 }}>
             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
               <Text style={styles.fullname}>{user?.full_name}</Text>
             </View>
-            <Text style={styles.username}>tung123</Text>
+            <Text style={styles.username}>{user?.user_name}</Text>
           </View>
         </View>
 
@@ -59,7 +59,7 @@ const Show = ({ navigation }) => {
             name="user"
             type="entypo"
             title="Username"
-            data="aloalo"
+            data={user?.user_name}
           />
           <UserInfoProfile
             name="contacts"
@@ -83,19 +83,19 @@ const Show = ({ navigation }) => {
             name="address"
             type="entypo"
             title="Address"
-            data="aloalo"
+            data={user?.main_address}
           />
           <UserInfoProfile
             name="birthday-cake"
             type="font-awesome"
             title="Birthday"
-            data={user?.birthday}
+            data={formatDate(new Date(user?.birthday))}
           />
           <UserInfoProfile
             name="transgender"
             type="font-awesome"
             title="Gender"
-            data="aloalo"
+            data={getGender(user?.gender)}
           />
 
           <MyOrder
@@ -165,10 +165,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "90%",
     padding: 10,
-    // height: 50,
-    // marginLeft: 20,
-    // marginRight: 20,
-    // marginTop: 20,
     borderRadius: 10,
     backgroundColor: "#00aced",
   },

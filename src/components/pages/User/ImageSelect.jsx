@@ -12,7 +12,6 @@ import * as ImagePicker from "expo-image-picker";
 import { firebaseConfig } from "~/lib/firebase-config.js";
 import Firebase from "firebase";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { avatarName } from "~/lib/ultis/avatarName.js";
 
 let app;
 if (!Firebase.apps.length) {
@@ -32,7 +31,6 @@ if (!Firebase.apps.length) {
 export default function ImageSelect({ avatar, style, userId }) {
   const [image, setImage] = useState(avatar);
   const [uploading, setUploading] = useState(false);
-  console.log('1',image)
 
   const pickImage = async () => {
     setUploading(true)

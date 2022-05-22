@@ -21,13 +21,14 @@ import {
   Gender,
 } from "./UserInfoProfile";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { formatDate } from "~/lib/ultis/formatDate";
+import { formatDate } from "~/util/commonFunction";
 import ImageSelect from "./ImageSelect";
-import { avatarName } from "~/lib/ultis/avatarName.js";
+import { avatarName } from "~/util/commonFunction";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { request } from "~/lib";
 const Edit = ({ navigation }) => {
   const [userId, setUserId] = React.useState("");
+  const [password, setPass] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [fullname, setFullname] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -35,6 +36,7 @@ const Edit = ({ navigation }) => {
   // const [address, setAddress] = React.useState('')
   const [birthday, setBirthday] = React.useState("");
   const [gender, setGender] = React.useState(0);
+  const [address, mainAddress] = React.useState("");
 
   const [date, setDate] = React.useState(new Date());
   const [mode, setMode] = React.useState("date");
@@ -59,12 +61,18 @@ const Edit = ({ navigation }) => {
     try {
       const value = await AsyncStorage.getItem("@user");
       if (value !== null) {
-        // value previously stored
-        // console.log(value)
-        setUserId(JSON.parse(value).id);
+        const data = JSON.parse(value);
+        setUserId(data.id);
+        setPass(data.password);
+        setUsername(data.user_name);
+        setFullname(data.full_name);
+        setEmail(data.email);
+        setPhone(data.phone);
+        setBirthday(data.birthday);
+        setGender(data.gender);
+        mainAddress(data.main_address);
       }
     } catch (e) {
-      // error reading value
       console.log(e);
     }
   };
@@ -73,7 +81,6 @@ const Edit = ({ navigation }) => {
     getData();
   }, []);
 
-  
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -117,6 +124,13 @@ const Edit = ({ navigation }) => {
             defaultValue={phone}
           />
           <EditTextField
+            icon={{ name: "address", type: "entypo" }}
+            name="Address"
+            placeholder=""
+            onChangeText={(newText) => mainAddress(newText)}
+            defaultValue={address}
+          />
+          <EditTextField
             icon={{ name: "email", type: "" }}
             name="Email"
             placeholder=""
@@ -157,8 +171,25 @@ const Edit = ({ navigation }) => {
           <TouchableOpacity
             style={styles.buttonEdit}
             color="#ffffff"
-            onPress={() => {
-              // navigation.navigate("EditProfile");
+            onPress={async () => {
+              const dataRequest = {
+                id: userId,
+                password: password,
+                avatar: avatarName(userId),
+                full_name: fullname ? fullname : "",
+                phone: phone ? phone : "",
+                birthday: birthday,
+                gender: gender,
+                email: email ? email : "",
+                user_name: username ? username : "",
+                main_address: address ? address : "",
+              };
+              const res = await request.put("/api/user", dataRequest);
+              if (res.data.status === 200) {
+                Alert.alert("Upload thành công!");
+              } else {
+                Alert.alert(res.data.data);
+              }
             }}
           >
             <Icon name="edit" type="" color="white" />

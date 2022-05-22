@@ -11,7 +11,8 @@ function Login({ navigation }) {
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      value = await AsyncStorage.setItem("@user", jsonValue);
+      await AsyncStorage.setItem("@user", jsonValue);
+      console.log(value)
       navigation.navigate("Homenavigate");
       console.log("da dang nhap");
     } catch (e) {
@@ -28,19 +29,9 @@ function Login({ navigation }) {
         email: email,
         password: password,
       })
-      .then((res) =>
-        storeData({
-          id: 1,
-          password: "8Dnfhhq3Q9ze",
-          avatar: null,
-          background: null,
-          full_name: "Orelia Wilber",
-          phone: "(474) 4551200",
-          birthday: "2021-05-11T00:00:00",
-          gender: 2,
-          email: "owilber0@cbsnews.com",
-        })
-      )
+      .then((res) => {
+        storeData(res.data.data);
+      })
       .then(setLoading(false))
       .catch((err) => {
         [setLoading(false), Alert.alert(err.response.data.data)];
@@ -51,11 +42,9 @@ function Login({ navigation }) {
     try {
       const value = await AsyncStorage.getItem("@user");
       if (value !== null) {
-        // value previously stored
-        // console.log(value)
+        
       }
     } catch (e) {
-      // error reading value
     }
   };
   const [email, setEmail] = React.useState("");
@@ -92,10 +81,7 @@ function Login({ navigation }) {
           color="#339900"
           title="Login"
           onPress={() => {
-            return ([
-              setLoading(true), 
-              handleLogin()
-            ])
+            return [setLoading(true), handleLogin()];
           }}
         />
       </View>

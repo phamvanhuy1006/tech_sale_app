@@ -2,26 +2,38 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Icon } from "@rneui/themed";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import { request } from "~/lib";
+import { useState } from 'react'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Product = (props) => {
+
+  const [loading, setLoading] = useState(false)
   const storeData = async (value) => {
+    setLoading(true)
     try {
-      const response = await request.get(`/api/product/${value}`)
-      var product = response.data.data
-      let cart = []
-      var key = `product/${value}`
-      if (product != null) {
-        cart.push({[key] : product})
+      const response = await request.get(`/api/product/${value}`);
+      var product = { data: response.data.data, quanlity: 1 };
+      let cart = [];
+      let jsonCart = await AsyncStorage.getItem("@cart", jsonCart);
+      if (jsonCart) {
+        cart = JSON.parse(jsonCart);
       }
-      console.log(cart)
-      const jsonCart = JSON.stringify(cart);
-      value = await AsyncStorage.setItem("@cart", jsonCart);
-      props.navigation.navigate("cart");
-      console.log("da luu cart");
+      if (product != null) {
+        const index = cart.indexOf(cart.find((item) => item.data.id === value));
+        if (index === -1) {
+          cart.push(product);
+        } else {
+          cart[index].quanlity += 1;
+        }
+      }
+      jsonCart = JSON.stringify(cart);
+      await AsyncStorage.setItem("@cart", jsonCart);
+      setLoading(false)
+      props.navigation.navigate("cart", {carts: jsonCart});
+      // console.log('cartday',navigation);
     } catch (e) {
       // saving error
-      console.log(e)
+      console.log(e);
     }
   };
 
@@ -48,7 +60,7 @@ const Product = (props) => {
       <TouchableOpacity
         style={styles.addPro}
         onPress={() => {
-          storeData(props.id)
+          storeData(props.id);
         }}
       >
         <Icon name="add-to-list" color="green" type="entypo" />

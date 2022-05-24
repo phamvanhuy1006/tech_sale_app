@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, Image, Button } from "react-native";
 import { Product } from "./Product";
 import { request } from "~/lib";
 import { useState, useEffect } from "react";
+import { salePrice, round } from '~/lib/ultis'
 
 function TopProduct({ navigation }) {
   const [products, setProducts] = useState([]);
@@ -11,14 +12,6 @@ function TopProduct({ navigation }) {
       .get("/api/product")
       .then((response) => setProducts(response.data.data));
   });
-
-  const salePrice = (price, sale) => {
-    return Math.round((Number(price) * Number(sale)) / 100);
-  };
-
-  const round = (rate) => {
-    return rate.toFixed(2);
-  };
 
   return (
     <View style={styles.box}>

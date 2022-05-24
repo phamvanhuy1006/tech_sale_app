@@ -7,26 +7,39 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { ProductComponent } from "./ProductComponent";
+import { useEffect, useState, useRef } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function Cart() {
-  const obj = {
-    name: "shoe",
-    image: require("../../../assets/cr7.jpeg"),
-    pricePerProduct: 120000,
-    amountOfProducts: 5,
-    totalProduct: 20,
+function Cart({ route, navigation }) {
+  const [cart, setCart] = useState([]);
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@cart");
+      if (value !== null) {
+        setCart(JSON.parse(value));
+      }
+    } catch (e) {
+      // error reading value
+    }
   };
+
+  useEffect(() => {
+    getData();
+  }, [route.params?.carts]);
+  console.log(route.params?.carts);
+
+  // a.splice(a.indexOf(a.find(item => item.id === 2)), 1)
   return (
     <SafeAreaView>
       <ScrollView style={styles.container}>
-        <ProductComponent {...obj} />
-        <ProductComponent {...obj} />
-        <ProductComponent {...obj} />
-        <ProductComponent {...obj} />
-        <ProductComponent {...obj} />
-        <ProductComponent {...obj} />
-        <ProductComponent {...obj} />
-
+        {cart.map((product) => (
+          <ProductComponent
+            key={product.data.id}
+            quanlity={product.quanlity}
+            {...product.data}
+            navigation={navigation}
+          />
+        ))}
       </ScrollView>
       <View style={styles.bottom}>
         <Text style={styles.totalTxt}>Total: 100000</Text>

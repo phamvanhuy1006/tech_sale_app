@@ -2,25 +2,38 @@ import {
   View,
   Text,
   Image,
-  Button,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
+  Alert,
 } from "react-native";
 
 import { Icon } from "react-native-elements";
 import { useEffect, useState } from "react";
+import { salePrice } from "~/lib/ultis";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProductComponent = ({
+  description,
+  flash_sale_percent,
+  flash_sale_time,
+  id,
+  images,
   name,
-  image,
-  pricePerProduct,
-  amountOfProducts,
-  totalProduct,
+  number_of_likes,
+  number_of_rate,
+  price,
+  rate,
+  stock,
+  quanlity,
+  navigation,
 }) => {
-  const [amountState, setAmount] = useState(amountOfProducts);
+  const [amountState, setAmount] = useState();
+  const [productId, setProductId] = useState(id);
+  const [loading, setLoading] = useState(false);
 
   const increment = () => {
-    if (amountState < totalProduct) {
+    if (amountState < stock) {
       setAmount(amountState + 1);
     }
   };
@@ -31,31 +44,87 @@ const ProductComponent = ({
     }
   };
 
+  useEffect(() => {
+    setAmount(quanlity);
+  }, [quanlity]);
+
+  useEffect(async () => {
+    try {
+      let cart = [];
+      let jsonCart = await AsyncStorage.getItem("@cart", jsonCart);
+      if (jsonCart) {
+        cart = JSON.parse(jsonCart);
+      }
+      const index = cart.indexOf(
+        cart.find((item) => item.data.id === productId)
+      );
+      if (index === -1) {
+      } else {
+        cart[index].quanlity = amountState;
+      }
+      jsonCart = JSON.stringify(cart);
+      await AsyncStorage.setItem("@cart", jsonCart);
+    } catch (e) {
+      // saving error
+      Alert.alert("updateCart bị lỗi");
+    }
+  }, [amountState]);
+
+  const handleDelete = async () => {
+    try {
+      let cart = [];
+      let jsonCart = await AsyncStorage.getItem("@cart", jsonCart);
+      if (jsonCart) {
+        cart = JSON.parse(jsonCart);
+      }
+      const index = cart.indexOf(
+        cart.find((item) => item.data.id === productId)
+      );
+      if (index === -1) {
+      } else {
+        cart.splice(index, 1);
+      }
+      jsonCart = JSON.stringify(cart);
+      await AsyncStorage.setItem("@cart", jsonCart);
+      navigation.navigate("cart", { carts: jsonCart });
+    } catch (e) {
+      // saving error
+      Alert.alert("handleDelete bị lỗi");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleDelete();
+          }}
+        >
           <Icon name="x-circle" type="feather" />
         </TouchableOpacity>
       </View>
 
       <View>
-        <Image style={styles.image} source={image} />
+        <Image style={styles.image} source={{ uri: images }} />
       </View>
 
       <View style={styles.details}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.price}>Giá: {amountOfProducts}</Text>
+        <Text style={styles.price}>
+          Đơn giá: {salePrice(price, flash_sale_percent)}
+        </Text>
+        <Text style={styles.price}>Số lượng: {amountState}</Text>
       </View>
 
       <View style={styles.amountOfProduct}>
-        <TouchableOpacity onPress={decrement} style={{ marginRight: 5 }}>
+        <TouchableOpacity onPress={decrement} style={{ alignItems: "center" }}>
           <Icon name="minus" type="feather" color="#ff000f" />
         </TouchableOpacity>
-        <View>
+        <View style={{ backgroundColor: "white", alignItems: "center" }}>
           <Text>{amountState}</Text>
         </View>
-        <TouchableOpacity onPress={increment} style={{ marginLeft: 5 }}>
+        <TouchableOpacity onPress={increment} style={{ alignItems: "center" }}>
           <Icon name="add" type="ionicon" color="#2fff00" />
         </TouchableOpacity>
       </View>
@@ -79,12 +148,12 @@ const styles = StyleSheet.create({
     width: 160,
     height: "80%",
     marginLeft: 5,
+    borderRadius: 10,
   },
   amountOfProduct: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: "column",
+    backgroundColor: "#FFA500",
+    borderRadius: 10,
   },
   details: {
     marginLeft: 5,

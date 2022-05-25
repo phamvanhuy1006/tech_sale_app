@@ -9,24 +9,14 @@ import {
 import { ProductComponent } from "./ProductComponent";
 import { useEffect, useState, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import "abortcontroller-polyfill";
 
 function Cart({ route, navigation }) {
   const [cart, setCart] = useState([]);
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem("@cart");
-      if (value !== null) {
-        setCart(JSON.parse(value));
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-
+  
   useEffect(() => {
-    getData();
+    AsyncStorage.getItem("@cart").then((res) => setCart(JSON.parse(res)));
   }, [route.params?.carts]);
-  console.log(route.params?.carts);
 
   // a.splice(a.indexOf(a.find(item => item.id === 2)), 1)
   return (
@@ -38,12 +28,19 @@ function Cart({ route, navigation }) {
             quanlity={product.quanlity}
             {...product.data}
             navigation={navigation}
+            loading={route.params?.carts}
           />
         ))}
       </ScrollView>
       <View style={styles.bottom}>
         <Text style={styles.totalTxt}>Total: 100000</Text>
-        <TouchableOpacity style={styles.checkoutBtn} activeOpacity="0.5">
+        <TouchableOpacity
+          style={styles.checkoutBtn}
+          activeOpacity="0.5"
+          onPress={() => {
+            navigation.navigate("Checkout", { carts: JSON.stringify(cart) });
+          }}
+        >
           <Text style={styles.checkoutTxt}>Checkout Now</Text>
         </TouchableOpacity>
       </View>

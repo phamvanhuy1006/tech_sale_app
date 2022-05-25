@@ -12,9 +12,7 @@ function Login({ navigation }) {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem("@user", jsonValue);
-      console.log(value)
       navigation.navigate("Homenavigate");
-      console.log("da dang nhap");
     } catch (e) {
       // saving error
     }
@@ -30,7 +28,7 @@ function Login({ navigation }) {
         password: password,
       })
       .then((res) => {
-        storeData(res.data.data);
+        storeData(res.data.data)
       })
       .then(setLoading(false))
       .catch((err) => {
@@ -38,15 +36,6 @@ function Login({ navigation }) {
       });
   };
 
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem("@user");
-      if (value !== null) {
-        
-      }
-    } catch (e) {
-    }
-  };
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 

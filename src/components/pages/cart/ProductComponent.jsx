@@ -26,35 +26,39 @@ const ProductComponent = ({
   rate,
   stock,
   quanlity,
+  loading,
   navigation,
 }) => {
-  const [amountState, setAmount] = useState();
+  const [amountState, setAmount] = useState(quanlity);
   const [productId, setProductId] = useState(id);
-  const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useState([]);
 
-  const increment = () => {
+  const increment = async () => {
     if (amountState < stock) {
       setAmount(amountState + 1);
     }
   };
 
-  const decrement = () => {
+  const decrement = async () => {
     if (amountState > 0) {
       setAmount(amountState - 1);
     }
   };
 
   useEffect(() => {
-    setAmount(quanlity);
-  }, [quanlity]);
-
-  useEffect(async () => {
     try {
-      let cart = [];
-      let jsonCart = await AsyncStorage.getItem("@cart", jsonCart);
-      if (jsonCart) {
-        cart = JSON.parse(jsonCart);
-      }
+      AsyncStorage.getItem("@cart").then((res) => {
+        return [setCart(JSON.parse(res))];
+      });
+    } catch (e) {
+      // saving error
+      // Alert.alert("updateCart bị lỗi");
+      console.log(e);
+    }
+  }, [amountState]);
+
+  useEffect(() => {
+    if (JSON.stringify(cart) != "[]") {
       const index = cart.indexOf(
         cart.find((item) => item.data.id === productId)
       );
@@ -62,13 +66,9 @@ const ProductComponent = ({
       } else {
         cart[index].quanlity = amountState;
       }
-      jsonCart = JSON.stringify(cart);
-      await AsyncStorage.setItem("@cart", jsonCart);
-    } catch (e) {
-      // saving error
-      Alert.alert("updateCart bị lỗi");
+      AsyncStorage.setItem("@cart", JSON.stringify(cart));
     }
-  }, [amountState]);
+  }, [cart]);
 
   const handleDelete = async () => {
     try {

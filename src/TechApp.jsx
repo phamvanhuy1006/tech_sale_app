@@ -3,14 +3,15 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { AppNavigation } from './components/homenavigation';
+import { AppNavigation } from "./components/homenavigation";
 import { Login } from "./components/auth";
 import { Welcome } from "./components/auth";
 import { Register } from "./components/auth";
 import { ForgotPassword } from "./components/auth";
 import { Profile } from "./components/pages/user";
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
+
 const TechApp = () => {
   return (
     <NavigationContainer>
@@ -52,7 +53,7 @@ const TechApp = () => {
           component={Profile}
           options={{
             title: "Profile",
-            headerShown: false
+            headerShown: false,
           }}
         />
 
@@ -61,7 +62,7 @@ const TechApp = () => {
           component={AppNavigation}
           options={{
             title: "Profile",
-            headerShown: false
+            headerShown: false,
           }}
         />
 
@@ -69,10 +70,9 @@ const TechApp = () => {
           name="ListProduct"
           component={Login}
           options={{
-            title: "product"
+            title: "product",
           }}
         />
-
       </Stack.Navigator>
       {/* <NativeRouter>
           <Routes>
@@ -83,7 +83,7 @@ const TechApp = () => {
 
     // <Cart />
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -91,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { TechApp }
+export { TechApp };

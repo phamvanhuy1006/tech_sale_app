@@ -30,7 +30,6 @@ const Product = (props) => {
       await AsyncStorage.setItem("@cart", jsonCart);
       setLoading(false)
       props.navigation.navigate("cart", {carts: jsonCart});
-      // console.log('cartday',navigation);
     } catch (e) {
       // saving error
       console.log(e);

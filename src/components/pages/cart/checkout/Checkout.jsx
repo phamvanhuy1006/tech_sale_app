@@ -7,17 +7,23 @@ import {
   ScrollView,
 } from "react-native";
 import { OrderLine } from "./OrderLine";
-
-function Checkout() {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+function Checkout({ route, navigation }) {
   const obj = {
     name: "shoe",
     store: "store_name",
-    image: require("../../../assets/cr7.jpeg"),
+    image: require("~/assets/cr7.jpeg"),
     amountOfProduct: 5,
     pricePerProduct: 20000,
   };
+  const [cart, setCart] = useState([]);
+  useEffect(() => {
+    AsyncStorage.getItem("@cart").then((res) => setCart(JSON.parse(res)));
+  }, [route.params?.carts]);
+
   return (
-    <SafeAreaView style={{ width: "100%", height: "100%" }}>
+    <SafeAreaView style={{ width: "100%", height: "93 %" }}>
       <ScrollView style={styles.container}>
         <View style={styles.shippingAddress}>
           <Text style={styles.titleShippingAddress}>Shipping address</Text>
@@ -34,16 +40,25 @@ function Checkout() {
           </View>
 
           <View style={styles.optionsAddress}>
-            <TouchableOpacity style={styles.btnChangeAddress}>
+            <TouchableOpacity
+              style={styles.btnChangeAddress}
+              onPress={() => {
+                navigation.navigate("ListAddress");
+              }}
+            >
               <Text style={styles.txtChangeAddress}>Change</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.orderLines}>
-          <OrderLine {...obj} />
-          <OrderLine {...obj} />
-          <OrderLine {...obj} />
+          {cart.map((product) => (
+            <OrderLine
+              key={product.data.id}
+              quanlity={product.quanlity}
+              {...product.data}
+            />
+          ))}
         </View>
 
         <View style={styles.bottom}>

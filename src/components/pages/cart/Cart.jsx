@@ -13,25 +13,31 @@ import "abortcontroller-polyfill";
 
 function Cart({ route, navigation }) {
   const [cart, setCart] = useState([]);
-  
+
   useEffect(() => {
     AsyncStorage.getItem("@cart").then((res) => setCart(JSON.parse(res)));
   }, [route.params?.carts]);
 
-  // a.splice(a.indexOf(a.find(item => item.id === 2)), 1)
   return (
-    <SafeAreaView>
-      <ScrollView style={styles.container}>
-        {cart.map((product) => (
-          <ProductComponent
-            key={product.data.id}
-            quanlity={product.quanlity}
-            {...product.data}
-            navigation={navigation}
-            loading={route.params?.carts}
-          />
-        ))}
-      </ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={{ flex: 12 }}>
+        <ScrollView style={styles.container}>
+          {cart.map((order) => (
+            <View key={order.shop_id}>
+              <Text>{order.shop_id}</Text>
+              {order.order.map((product) => (
+                <ProductComponent
+                  key={product.data.id}
+                  quanlity={product.quanlity}
+                  {...product.data}
+                  navigation={navigation}
+                  loading={route.params?.carts}
+                />
+              ))}
+            </View>
+          ))}
+        </ScrollView>
+      </View>
       <View style={styles.bottom}>
         <Text style={styles.totalTxt}>Total: 100000</Text>
         <TouchableOpacity
@@ -50,18 +56,18 @@ function Cart({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "83%",
+    // width: "100%",
+    // height: "100%",
     backgroundColor: "#f5ecec",
   },
   bottom: {
-    height: "10%",
-    display: "flex",
+    // height: "10%",
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
     backgroundColor: "#2fff00",
     padding: 5,
+    flex: 1,
   },
   totalTxt: {
     fontWeight: "bold",
@@ -75,8 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffd400",
     width: 150,
     height: 40,
-    borderRadius: 10000,
-    display: "flex",
+    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,

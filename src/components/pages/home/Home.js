@@ -7,6 +7,7 @@ import { BottomHome } from "./BottomHome";
 import { Show } from "../user/Show";
 import { Edit } from "../user/Edit";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ShowProduct } from "~/screen/product";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +15,9 @@ function Home({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <ProductCategori />
-      <FlashSale />
+      <View style={{ marginTop: 10 }}>
+        <FlashSale navigation={navigation} />
+      </View>
       <TopProduct navigation={navigation} />
       <BottomHome />
     </ScrollView>

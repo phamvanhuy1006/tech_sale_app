@@ -24,6 +24,7 @@ const ProductComponent = ({
   number_of_rate,
   price,
   rate,
+  id_shop,
   stock,
   quanlity,
   loading,
@@ -59,14 +60,20 @@ const ProductComponent = ({
 
   useEffect(() => {
     if (JSON.stringify(cart) != "[]") {
-      const index = cart.indexOf(
-        cart.find((item) => item.data.id === productId)
+      const indexShop = cart.indexOf(
+        cart.find((order) => order.shop_id === id_shop)
       );
-      if (index === -1) {
+      if (indexShop === -1) {
       } else {
-        cart[index].quanlity = amountState;
+        const order = cart[indexShop].order;
+        const indexOrder = order.indexOf(
+          order.find((product) => product.data.id === productId)
+        );
+        if (indexOrder !== -1) {
+          cart[indexShop].order[indexOrder].quanlity = amountState;
+        }
+        AsyncStorage.setItem("@cart", JSON.stringify(cart));
       }
-      AsyncStorage.setItem("@cart", JSON.stringify(cart));
     }
   }, [cart]);
 
@@ -77,16 +84,35 @@ const ProductComponent = ({
       if (jsonCart) {
         cart = JSON.parse(jsonCart);
       }
-      const index = cart.indexOf(
-        cart.find((item) => item.data.id === productId)
+      // const index = cart.indexOf(
+      //   cart.find((item) => item.data.id === productId)
+      // );
+      // if (index === -1) {
+      // } else {
+      //   cart.splice(index, 1);
+      // }
+      const indexShop = cart.indexOf(
+        cart.find((order) => order.shop_id === id_shop)
       );
-      if (index === -1) {
+      if (indexShop === -1) {
+
       } else {
-        cart.splice(index, 1);
+        const order = cart[indexShop].order;
+        const indexOrder = order.indexOf(
+          order.find((product) => product.data.id === productId)
+        );
+        if (indexOrder !== -1) {
+          cart[indexShop].order.splice(indexOrder, 1);
+        }
+        jsonCart = JSON.stringify(cart);
+        await AsyncStorage.setItem("@cart", jsonCart);
+        navigation.navigate("cartnavigation", {
+          screen: "cart",
+          params: {
+            carts: jsonCart,
+          },
+        });
       }
-      jsonCart = JSON.stringify(cart);
-      await AsyncStorage.setItem("@cart", jsonCart);
-      navigation.navigate("cart", { carts: jsonCart });
     } catch (e) {
       // saving error
       Alert.alert("handleDelete bị lỗi");

@@ -1,36 +1,65 @@
-import { Text, View, StyleSheet, Image, Button} from 'react-native';
-import { Product } from './Product';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Button,
+  Dimensions,
+} from "react-native";
+import { Product } from "./Product";
+import { useEffect, useState } from "react";
+import Carousel, { ParallaxImage } from "react-native-snap-carousel";
+import { request } from "~/lib";
+import { salePrice, round } from "~/lib/ultis";
 
-function FlashSale() {
-  return(
-    <View style={styles.box}>
-      <Text style={styles.title}>Flash Sale</Text>
+const { width: screenWidth } = Dimensions.get("window");
 
-      <View style={styles.flex}>
-        <Product name="Samsung Galaxy S22 UlTra 5G 128Gb" salePrice={70000} rest={30} />
+function FlashSale({ navigation }) {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    request
+      .get("/api/product")
+      .then((response) => setProducts(response.data.data));
+  }, []);
+
+  const _renderItem = ({ item, index }, parallaxProps) => {
+    return (
+      <View style={styles.item}>
+        <Product
+          name={item?.name}
+          image={item?.images}
+          salePrice={salePrice(item?.price, item?.flash_sale_percent)}
+          stock={item?.stock}
+          rate={round(item?.rate)}
+          price={item?.price}
+          salePercent={item?.flash_sale_percent}
+          id={item?.id}
+          navigation={navigation}
+          style={{ padding: 3 }}
+        />
       </View>
-    </View>
+    );
+  };
+
+  return (
+    <Carousel
+      sliderWidth={screenWidth}
+      sliderHeight={screenWidth}
+      itemWidth={screenWidth - 60}
+      data={products}
+      renderItem={_renderItem}
+      hasParallaxImages={true}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  box: {
-    marginLeft: '5%',
-    marginRight: '5%',
-    flex: 1,
+  item: {
+    width: screenWidth - 50,
+    overflow: "hidden",
+    padding: 3,
   },
+});
 
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginTop: '3%'
-  },
-
-  flex: {
-    flexDirection: 'row',
-    marginTop: '3%',
-    overflow: "scroll"
-  }
-})
-
-export { FlashSale }
+export { FlashSale };

@@ -28,7 +28,7 @@ function Login({ navigation }) {
         password: password,
       })
       .then((res) => {
-        storeData(res.data.data)
+        storeData(res.data.data);
       })
       .then(setLoading(false))
       .catch((err) => {

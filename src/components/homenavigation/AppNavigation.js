@@ -8,6 +8,7 @@ import {
   Text,
   StyleSheet,
   View,
+  TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HomeNavigation } from "../pages/home";
@@ -20,6 +21,63 @@ import { Menu } from "./Menu";
 import { UserProvider } from "~/context/UserContext";
 
 const Tab = createBottomTabNavigator();
+
+function MyTabBar({ state, descriptors, navigation }) {
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <View style={{ flexDirection: "row" }}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: "tabPress",
+            target: route.key,
+          });
+
+          console.log(111, event);
+          setLoading(!loading);
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name, { loading: loading });
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: "tabLongPress",
+            target: route.key,
+          });
+        };
+
+        return (
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            style={{ flex: 1 }}
+          >
+            <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
+              {label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
 
 const AppNavigation = ({ navigation }) => {
   const drawer = useRef(null);
@@ -40,23 +98,12 @@ const AppNavigation = ({ navigation }) => {
           <Menu navigation={navigation} drawer={drawer} />
         )}
       >
-        <Tab.Navigator
-          screenOptions={{
-            tabBarStyle: { position: "absolute" },
-            tabBarBackground: () => (
-              <BlurView
-                tint="light"
-                intensity={100}
-                style={StyleSheet.absoluteFill}
-              />
-            ),
-          }}
-        >
+        <Tab.Navigator>
           <Tab.Screen
             name="homeNavigation"
             component={HomeNavigation}
             options={{
-              headerTitle: () => <Header drawer={drawer} />,
+              headerTitle: () => <Header drawer={drawer} navigation={navigation} />,
               tabBarLabelPosition: "below-icon",
               tabBarIcon: () => <Icon name="house" />,
             }}
@@ -77,6 +124,7 @@ const AppNavigation = ({ navigation }) => {
             options={{
               title: "Cart",
               headerShown: false,
+              tabBarStyle: { display: "none" },
               tabBarLabelPosition: "below-icon",
               tabBarIcon: () => (
                 <Icon name="shopping-cart" type="font-awesome" />

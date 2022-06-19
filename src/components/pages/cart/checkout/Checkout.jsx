@@ -23,7 +23,7 @@ function Checkout({ route, navigation }) {
   }, [route.params?.carts]);
 
   return (
-    <SafeAreaView style={{ width: "100%", height: "93 %" }}>
+    <SafeAreaView style={{ width: "100%", height: "100 %" }}>
       <ScrollView style={styles.container}>
         <View style={styles.shippingAddress}>
           <Text style={styles.titleShippingAddress}>Shipping address</Text>
@@ -52,22 +52,26 @@ function Checkout({ route, navigation }) {
         </View>
 
         <View style={styles.orderLines}>
-          {cart.map((product) => (
-            <OrderLine
-              key={product.data.id}
-              quanlity={product.quanlity}
-              {...product.data}
-            />
+          {cart.map((order) => (
+            <View key={order.shop_id}>
+              <Text>{order.shop_id}</Text>
+              {order.order.map((product) => (
+                <OrderLine
+                  key={product.data.id}
+                  quanlity={product.quanlity}
+                  {...product.data}
+                />
+              ))}
+            </View>
           ))}
         </View>
-
-        <View style={styles.bottom}>
-          <Text style={styles.totalTxt}>Total: 100000</Text>
-          <TouchableOpacity style={styles.checkoutBtn} activeOpacity="0.5">
-            <Text style={styles.checkoutTxt}>Confirm and Pay</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+      <View style={styles.bottom}>
+        <Text style={styles.totalTxt}>Total: 100000</Text>
+        <TouchableOpacity style={styles.checkoutBtn} activeOpacity="0.5">
+          <Text style={styles.checkoutTxt}>Confirm and Pay</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     marginTop: 5,
     width: "100%",
-    height: 400,
+    height: "100%",
   },
   shippingAddress: {
     display: "flex",

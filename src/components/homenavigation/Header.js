@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Icon } from "@rneui/themed";
 
-function Header({ drawer }) {
+function Header({ drawer, navigation }) {
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
 
@@ -21,7 +21,12 @@ function Header({ drawer }) {
       <TouchableOpacity>
         <Icon name="search" type="" />
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {navigation.navigate("cartnavigation", {
+        screen: "cart",
+        params: {
+          cart: 1
+        }
+      })}}>
         <Icon name="notifications" type="ionicons" />
       </TouchableOpacity>
     </View>

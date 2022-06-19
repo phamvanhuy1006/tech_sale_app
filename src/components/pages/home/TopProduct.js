@@ -1,8 +1,10 @@
-import { Text, View, StyleSheet, Image, Button } from "react-native";
+import { Text, View, StyleSheet, Image, Button, Dimensions } from "react-native";
 import { Product } from "./Product";
 import { request } from "~/lib";
 import { useState, useEffect } from "react";
 import { salePrice, round } from '~/lib/ultis'
+
+const { width: screenWidth } = Dimensions.get("window");
 
 function TopProduct({ navigation }) {
   const [products, setProducts] = useState([]);
@@ -11,7 +13,7 @@ function TopProduct({ navigation }) {
     request
       .get("/api/product")
       .then((response) => setProducts(response.data.data));
-  });
+  }, []);
 
   return (
     <View style={styles.box}>
@@ -23,7 +25,7 @@ function TopProduct({ navigation }) {
           <View key={product.id} style={styles.card}>
             <Product
               name={product?.name}
-              image={product.images}
+              image={product?.images}
               salePrice={salePrice(product?.price, product?.flash_sale_percent)}
               stock={product?.stock}
               rate={round(product?.rate)}
@@ -31,6 +33,7 @@ function TopProduct({ navigation }) {
               salePercent={product?.flash_sale_percent}
               id={product?.id}
               navigation={navigation}
+              // style={}
             />
           </View>,
         ])}
@@ -41,8 +44,7 @@ function TopProduct({ navigation }) {
 
 const styles = StyleSheet.create({
   box: {
-    marginLeft: "5%",
-    marginRight: "5%",
+    paddingHorizontal: 10,
     flex: 1,
     marginTop: "5%",
     marginBottom: "5%",
@@ -54,16 +56,12 @@ const styles = StyleSheet.create({
     marginTop: "3%",
   },
 
-  flex: {
-    flexDirection: "row",
-    marginTop: "6%",
-  },
-
   row: {
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: "5%",
-    width: "100%",
+    flex: 1,
+    width: "100%"
   },
 
   buttonView: {
@@ -80,7 +78,8 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginHorizontal: "1%",
     marginBottom: 6,
-    maxWidth: "50%",
+    // maxWidth: "50%",
+    width: '48%',
     textAlign: "center",
   },
 });

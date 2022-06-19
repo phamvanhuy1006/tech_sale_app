@@ -6,23 +6,59 @@ import {
   View,
   TextInput,
   ScrollView,
-  Alert
+  Alert,
+  ImageBackground,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import UserContext from "~/context/UserContext";
+import { getMainAddress } from "~/lib/ultis";
+import { createAddress } from "~/lib/api";
 
 const RegisterAddress = () => {
-  const [provinceId, setProvinceId] = useState(null);
-  const [districtId, setDistrictId] = useState(null);
-  const [wardId, setWardId] = useState(null);
-  const [detailAddress, setDetailAddress] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    formState: { errors },
+    register,
+  } = useForm({
+    defaultValues: {
+      province_id: "",
+      district_id: "",
+      ward_id: "",
+      address_detail: "",
+    },
+  });
+  const onSubmit = async (data) => {
+    let value = {
+      address_detail: data.address_detail,
+      district_id: JSON.parse(data.district_id).id,
+      province_id: JSON.parse(data.province_id).id,
+      ward_id: JSON.parse(data.ward_id).id,
+      id_user: 1,
+      name: "nha rieng",
+      phone: "09889",
+      main_address: getMainAddress(
+        JSON.parse(data.ward_id).name,
+        JSON.parse(data.district_id).name,
+        JSON.parse(data.province_id).name
+      ),
+      id: 106,
+    };
+
+    const res = await createAddress(value);
+    console.log(res.data);
+  };
 
   const getProvinces = async () => {
     let urlProvince = "https://vapi.vnappmob.com/api/province";
@@ -40,7 +76,8 @@ const RegisterAddress = () => {
 
   const getDistricts = async () => {
     let urlDistrict =
-      "https://vapi.vnappmob.com/api/province/district/" + provinceId;
+      "https://vapi.vnappmob.com/api/province/district/" +
+      JSON.parse(getValues("province_id")).id;
 
     try {
       const response = await axios({
@@ -55,7 +92,9 @@ const RegisterAddress = () => {
   };
 
   const getWards = async () => {
-    let urlWard = "https://vapi.vnappmob.com/api/province/ward/" + districtId;
+    let urlWard =
+      "https://vapi.vnappmob.com/api/province/ward/" +
+      JSON.parse(getValues("district_id")).id;
 
     try {
       const response = await axios({
@@ -74,90 +113,146 @@ const RegisterAddress = () => {
   }, []);
 
   useEffect(() => {
-    if (provinceId) {
+    if (getValues("province_id")) {
       getDistricts();
     }
-  }, [provinceId]);
+  }, [getValues("province_id")]);
 
   useEffect(() => {
-    if (provinceId && districtId) {
+    if (getValues("province_id") && getValues("district_id")) {
       getWards();
     }
-  }, [districtId]);
+  }, [getValues("district_id")]);
+  // console.log(JSON.parse(getValues("district_id")).id);
 
-  const { register, handleSubmit, control } = useForm({ shouldUseNativeValidation: true });
-  const onSubmit = (data) => Alert.alert(JSON.stringify(data))
-  // useEffect(() => {
-  //   console.log(1)
-  // },[])
   return (
-    <SafeAreaView>
-      <ScrollView style={styles.container}>
-        <View style={{ marginBottom: 10 }}>
-          <Text style={styles.label}>Province</Text>
-          <Picker
-            selectedValue={provinceId}
-            onValueChange={(itemValue, itemIndex) => setProvinceId(itemValue)}
-            mode="dropdown"
-            control={control}
-            
-          >
-            {provinces.map((province) => (
-              <Picker.Item
-                key={province.province_id}
-                label={province.province_name}
-                value={province.province_id}
-              />
-            ))}
-          </Picker>
-        </View>
-        <View style={{ marginBottom: 10 }}>
-          <Text style={styles.label}>District</Text>
-          <Picker
-            selectedValue={districtId}
-            onValueChange={(itemValue, itemIndex) => setDistrictId(itemValue)}
-            mode="dropdown"
-          >
-            {districts.map((district) => (
-              <Picker.Item
-                key={district.district_id}
-                label={district.district_name}
-                value={district.district_id}
-              />
-            ))}
-          </Picker>
-        </View>
-        <View style={{ marginBottom: 10 }}>
-          <Text style={styles.label}>Ward</Text>
-          <Picker
-            selectedValue={wardId}
-            onValueChange={(itemValue, itemIndex) => setWardId(itemValue)}
-            mode="dropdown"
-          >
-            {wards.map((ward) => (
-              <Picker.Item
-                key={ward.ward_id}
-                label={ward.ward_name}
-                value={ward.ward_id}
-              />
-            ))}
-          </Picker>
-        </View>
-        <View style={{ marginBottom: 10 }}>
-          <Text style={styles.label}>Detail</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setDetailAddress}
-            value={detailAddress}
-          />
-        </View>
-        <View>
-          <TouchableOpacity style={styles.btnRegister} onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.txtRegister}>REGISTER ADDRESS</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <ImageBackground
+      source={require("~/assets/background-address.jpg")}
+      resizeMode="cover"
+      style={styles.image}
+    >
+      <SafeAreaView>
+        <ScrollView style={styles.container}>
+          <View style={[{ marginBottom: 10 }, styles.box]}>
+            <Text style={[styles.title]}>Chọn địa chỉ của bạn</Text>
+          </View>
+          <View style={[{ marginBottom: 10 }, styles.box]}>
+            <Text style={styles.label}>Province</Text>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Picker
+                  selectedValue={value}
+                  onValueChange={(value) => [
+                    onChange(value),
+                    setLoading(!loading),
+                  ]}
+                  mode="dropdown"
+                  onBlur={onBlur}
+                >
+                  {provinces.map((province) => (
+                    <Picker.Item
+                      key={province.province_id}
+                      label={province.province_name}
+                      value={JSON.stringify({
+                        id: province.province_id,
+                        name: province.province_name,
+                      })}
+                      // onFocus={()=> {setLoading(value.name)}}
+                    />
+                  ))}
+                </Picker>
+              )}
+              {...register("province_id")}
+              rules={{ required: true }}
+            />
+          </View>
+          <View style={[{ marginBottom: 10 }, styles.box]}>
+            <Text style={styles.label}>District</Text>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Picker
+                  selectedValue={value}
+                  onValueChange={(value) => [
+                    onChange(value),
+                    setLoading(!loading),
+                  ]}
+                  mode="dropdown"
+                  onBlur={onBlur}
+                >
+                  {districts.map((district) => (
+                    <Picker.Item
+                      key={district.district_id}
+                      label={district.district_name}
+                      value={JSON.stringify({
+                        id: district.district_id,
+                        name: district.district_name,
+                      })}
+                    />
+                  ))}
+                </Picker>
+              )}
+              {...register("district_id")}
+              rules={{ required: true }}
+            />
+          </View>
+          <View style={[{ marginBottom: 10 }, styles.box]}>
+            <Text style={styles.label}>Ward</Text>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Picker
+                  selectedValue={value}
+                  onValueChange={(value) => onChange(value)}
+                  mode="dropdown"
+                  onBlur={onBlur}
+                >
+                  {wards.map((ward) => (
+                    <Picker.Item
+                      key={ward.ward_id}
+                      label={ward.ward_name}
+                      value={JSON.stringify({
+                        id: ward.ward_id,
+                        name: ward.ward_name,
+                      })}
+                    />
+                  ))}
+                </Picker>
+              )}
+              {...register("ward_id")}
+              rules={{ required: true }}
+            />
+          </View>
+          <View style={[{ marginBottom: 10 }, styles.box]}>
+            <Text style={styles.label}>Detail</Text>
+
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                />
+              )}
+              {...register("address_detail")}
+              rules={{ required: true }}
+            />
+          </View>
+
+          <View>
+            <TouchableOpacity
+              style={styles.btnRegister}
+              onPress={handleSubmit(onSubmit)}
+            >
+              <Text style={styles.txtRegister}>REGISTER ADDRESS</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
@@ -166,16 +261,29 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
   },
+  title: {
+    fontSize: 20,
+    fontStyle: "italic",
+    fontWeight: "bold",
+    color: "blue",
+  },
   label: {
     fontWeight: "bold",
-    fontSize: 15,
-    paddingBottom: 10,
+    fontSize: 18,
+    fontStyle: "italic",
+    color: "green",
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
   },
   input: {
-    height: 40,
+    height: 50,
     borderWidth: 1,
     padding: 10,
     marginBottom: 40,
+    borderRadius: 10,
+    marginTop: 10,
   },
   btnRegister: {
     width: 200,
@@ -191,6 +299,10 @@ const styles = StyleSheet.create({
   },
   txtRegister: {
     color: "#fff",
+  },
+  box: {
+    borderRadius: 10,
+    padding: 10,
   },
 });
 

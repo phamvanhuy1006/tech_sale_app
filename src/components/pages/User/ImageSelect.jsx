@@ -42,10 +42,6 @@ export default function ImageSelect({ avatar, style, userId }) {
       quality: 1,
     });
 
-    // let result = await ImagePicker.launchCameraAsync()
-
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
       uploadImage(result.uri)

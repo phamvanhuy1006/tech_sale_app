@@ -10,7 +10,6 @@ export function stateLogin() {
       if (value !== null) {
         setLogin(true);
       }
-      console.log(value);
     } catch (e) {
       // error reading value
       console.log(e);

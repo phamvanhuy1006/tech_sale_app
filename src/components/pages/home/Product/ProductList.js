@@ -1,27 +1,24 @@
-import { Text, View, StyleSheet, Image, Button, Dimensions } from "react-native";
+import { useEffect, useState } from "react";
+import { request } from "~/lib/request";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Product } from "./Product";
-import { request } from "~/lib";
-import { useState, useEffect } from "react";
-import { salePrice, round } from '~/lib/ultis'
+import { salePrice, round } from "~/lib/ultis";
 
-const { width: screenWidth } = Dimensions.get("window");
-
-function TopProduct({ navigation }) {
-  const [products, setProducts] = useState([]);
-
+export const ProductList = ({ navigation, route }) => {
+  const [products, setProducts] = useState();
   useEffect(() => {
     request
-      .get("/api/product")
+      .get("api/product/param?id_category=" + route?.params?.id_category)
       .then((response) => setProducts(response.data.data));
-  }, []);
+  }, [route?.params?.id_category]);
 
   return (
-    <View style={styles.box}>
-      <Text style={styles.title}>Sản phẩm nổi bật</Text>
-      <View style={styles.buttonView}></View>
-
+    <ScrollView>
+      <View>
+        <Text>Ten cua hang</Text>
+      </View>
       <View style={styles.row}>
-        {products.map((product) => [
+        {products?.map((product) => [
           <View key={product.id} style={styles.card}>
             <Product
               name={product?.name}
@@ -38,10 +35,9 @@ function TopProduct({ navigation }) {
           </View>,
         ])}
       </View>
-    </View>
+    </ScrollView>
   );
-}
-
+};
 const styles = StyleSheet.create({
   box: {
     paddingHorizontal: 10,
@@ -54,7 +50,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginTop: "3%",
-    color: 'orange'
   },
 
   row: {
@@ -62,7 +57,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginTop: "5%",
     flex: 1,
-    width: "100%"
+    width: "100%",
   },
 
   buttonView: {
@@ -80,9 +75,7 @@ const styles = StyleSheet.create({
     marginHorizontal: "1%",
     marginBottom: 6,
     // maxWidth: "50%",
-    width: '48%',
+    width: "48%",
     textAlign: "center",
   },
 });
-
-export { TopProduct };

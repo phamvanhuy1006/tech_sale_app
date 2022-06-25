@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { salePrice } from "~/lib/ultis";
 
-const OrderLine = ({
+const LineItem = ({
   description,
   flash_sale_percent,
   flash_sale_time,
@@ -36,13 +36,13 @@ const OrderLine = ({
           <Text style={styles.name}>{name}</Text>
         </View>
         <View>
-          <Text numberOfLines={1} style={styles.store}></Text>
+          <Text numberOfLines={1} style={styles.store}>Ten Cua Hang</Text>
         </View>
         <View style={styles.quantityAndPrice}>
           <Text style={styles.price}>
             Giá: {salePrice(price, flash_sale_percent)}
           </Text>
-          <Text style={styles.txtQuantity}>Số lượng:{quanlity}</Text>
+          <Text style={styles.txtQuantity}>Quantity: {quanlity}</Text>
         </View>
       </View>
     </View>
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     backgroundColor: "#ffffff",
-    height: 100,
+    height: 200,
     paddingLeft: 5
   },
   image: {
-    width: 100,
+    width: 160,
     height: "80%",
     borderRadius: 10,
   },
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { OrderLine };
+export { LineItem };

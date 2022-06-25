@@ -10,7 +10,7 @@ import {
 
 import { Icon } from "react-native-elements";
 import { useEffect, useState } from "react";
-import { salePrice } from "~/lib/ultis";
+import { salePrice, handleDeleteOrder } from "~/lib/ultis";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProductComponent = ({
@@ -77,54 +77,12 @@ const ProductComponent = ({
     }
   }, [cart]);
 
-  const handleDelete = async () => {
-    try {
-      let cart = [];
-      let jsonCart = await AsyncStorage.getItem("@cart", jsonCart);
-      if (jsonCart) {
-        cart = JSON.parse(jsonCart);
-      }
-      // const index = cart.indexOf(
-      //   cart.find((item) => item.data.id === productId)
-      // );
-      // if (index === -1) {
-      // } else {
-      //   cart.splice(index, 1);
-      // }
-      const indexShop = cart.indexOf(
-        cart.find((order) => order.shop_id === id_shop)
-      );
-      if (indexShop === -1) {
-
-      } else {
-        const order = cart[indexShop].order;
-        const indexOrder = order.indexOf(
-          order.find((product) => product.data.id === productId)
-        );
-        if (indexOrder !== -1) {
-          cart[indexShop].order.splice(indexOrder, 1);
-        }
-        jsonCart = JSON.stringify(cart);
-        await AsyncStorage.setItem("@cart", jsonCart);
-        navigation.navigate("cartnavigation", {
-          screen: "cart",
-          params: {
-            carts: jsonCart,
-          },
-        });
-      }
-    } catch (e) {
-      // saving error
-      Alert.alert("handleDelete bị lỗi");
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View>
         <TouchableOpacity
           onPress={() => {
-            handleDelete();
+            handleDeleteOrder(productId, id_shop, navigation, "cart");
           }}
         >
           <Icon name="x-circle" type="feather" />

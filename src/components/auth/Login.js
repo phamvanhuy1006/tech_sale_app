@@ -1,6 +1,14 @@
 import React from "react";
 import { request } from "~/lib";
-import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  ImageBackground,
+} from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Loading } from "~/components/Loading";
@@ -40,52 +48,85 @@ function Login({ navigation }) {
   const [password, setPassword] = React.useState("");
 
   return (
-    <View style={styles.container}>
-      {loading ? <Loading /> : <View></View>}
-
+    <ImageBackground
+      style={styles.container}
+      source={require("~/assets/background-login.jpg")}
+      resizeMode="cover"
+    >
       <Text
         style={{
           fontSize: 25,
           fontWeight: "600",
           marginBottom: "5%",
-          color: "#ff3300",
+          color: "#fff",
         }}
       >
-        Login
+        Đăng nhập
       </Text>
       <TextInput
         style={styles.input}
-        placeholder="Email Address"
+        placeholder="Nhập địa chỉ email"
         onChangeText={(text) => setEmail(text)}
         defaultValue={email}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
+        placeholder="Mật khẩu"
+        secureTextEntry={true}
+        autoCorrect={false}
+        password={true}
+        onChangeText={(text) => {
+          setPassword(text);
+        }}
         defaultValue={password}
       />
       <View style={styles.login}>
-        <Button
-          color="#339900"
-          title="Login"
+        <TouchableOpacity
+          style={{
+            backgroundColor: "green",
+            alignItems: "center",
+            borderRadius: 5,
+          }}
+          borderRadius={2}
           onPress={() => {
             return [setLoading(true), handleLogin()];
           }}
-        />
+        >
+          <Text style={{ color: "white", fontSize: 18, paddingVertical: 3 }}>
+            Đăng nhập
+          </Text>
+        </TouchableOpacity>
       </View>
-      <Button
-        title="Forgot Password"
+      <TouchableOpacity
+        style={{ alignItems: "center" }}
         onPress={() => {
           navigation.navigate("ForgotPass");
         }}
-      />
-      <View>
-        <Text style={styles.linkregister}>
-          Didn 't have an account? <Text> Register Now </Text>
+      >
+        <Text style={{ textDecorationLine: "underline", color: "yellow" }}>
+          Quên mật khẩu
         </Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={styles.linkregister}>Didn 't have an account?</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+          style={{ paddingTop: 4 }}
+        >
+          <Text style={{ color: "orange", textTransform: "uppercase" }}>
+            Register Now
+          </Text>
+        </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -104,13 +145,13 @@ const styles = StyleSheet.create({
     // border: 'solid #000 1px',
     borderRadius: 10,
     marginBottom: 2,
+    backgroundColor: "#ccc",
     paddingLeft: 10,
   },
 
   login: {
     width: "60%",
-    backgroundColor: "#339900",
-    marginTop: 2,
+    marginVertical: 5,
   },
 
   linkregister: {

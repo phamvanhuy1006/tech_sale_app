@@ -14,16 +14,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import { useForm, Controller } from "react-hook-form";
-import UserContext from "~/context/UserContext";
 import { getMainAddress } from "~/lib/ultis";
 import { createAddress } from "~/lib/api";
+import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
+import UserContext from "~/context/UserContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RegisterAddress = () => {
   const [loading, setLoading] = useState(false);
-
+  const navigation = useNavigation();
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const user = useContext(UserContext);
 
   const {
     handleSubmit,
@@ -47,17 +51,23 @@ const RegisterAddress = () => {
       ward_id: JSON.parse(data.ward_id).id,
       id_user: 1,
       name: "nha rieng",
-      phone: "09889",
+      phone: user.phone,
       main_address: getMainAddress(
         JSON.parse(data.ward_id).name,
         JSON.parse(data.district_id).name,
         JSON.parse(data.province_id).name
       ),
-      id: 106,
+      id: 0,
     };
 
     const res = await createAddress(value);
-    console.log(res.data);
+    setLoading(!loading);
+    navigation.navigate("cartnavigation", {
+      screen: "ListAddress",
+      params: {
+        loading: loading,
+      },
+    });
   };
 
   const getProvinces = async () => {
@@ -123,7 +133,6 @@ const RegisterAddress = () => {
       getWards();
     }
   }, [getValues("district_id")]);
-  // console.log(JSON.parse(getValues("district_id")).id);
 
   return (
     <ImageBackground

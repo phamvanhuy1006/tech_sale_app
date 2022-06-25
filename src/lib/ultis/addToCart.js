@@ -13,12 +13,11 @@ const addToCart = async (value, navigation) => {
     };
     let cart = [];
 
-    let jsonCart = await AsyncStorage.getItem("@cart", jsonCart);
+    let jsonCart = await AsyncStorage.getItem("@cart");
 
     if (jsonCart) {
       cart = JSON.parse(jsonCart);
     }
-    // console.log(111, cart)
 
     if (product != null) {
       const indexShop = cart.indexOf(
@@ -34,6 +33,7 @@ const addToCart = async (value, navigation) => {
       }
        else {
         const order = cart[indexShop].order;
+        console.log(cart)
         const indexOrder = order.indexOf(order.find((product) => product.data.id === value))
         if (indexOrder === -1) {
           cart[indexShop].order.push(product)

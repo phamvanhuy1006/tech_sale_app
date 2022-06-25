@@ -183,6 +183,7 @@ const Edit = ({ navigation }) => {
                 email: email ? email : "",
                 user_name: username ? username : "",
                 main_address: address ? address : "",
+                id_shop: -1
               };
               const res = await request.put("/api/user", dataRequest);
               if (res.data.status === 200) {
@@ -204,10 +205,7 @@ const Edit = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    paddingLeft: 10,
-    paddingRight: 10,
-    width: "100%",
-    height: "90%",
+    paddingHorizontal: 10,
   },
   top: {
     flexDirection: "row",

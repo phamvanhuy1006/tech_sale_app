@@ -9,52 +9,71 @@ import {
 import { OrderLine } from "./OrderLine";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import { useContext } from "react";
+import UserContext from "~/context/UserContext";
+import { Icon } from "@rneui/themed";
+import { getAddress } from "~/lib/ultis";
+import { Shop } from "../";
+import { Divider } from "react-native-elements";
+
 function Checkout({ route, navigation }) {
-  const obj = {
-    name: "shoe",
-    store: "store_name",
-    image: require("~/assets/cr7.jpeg"),
-    amountOfProduct: 5,
-    pricePerProduct: 20000,
-  };
   const [cart, setCart] = useState([]);
+  const user = useContext(UserContext);
+  const [address, setAddress] = useState();
+
   useEffect(() => {
     AsyncStorage.getItem("@cart").then((res) => setCart(JSON.parse(res)));
+    AsyncStorage.getItem("@address").then((res) => setAddress(JSON.parse(res)));
   }, [route.params?.carts]);
 
+  // if(cart) {
+  //   let newCart = []
+  //   (cart.map((order, index) => newCart+=))
+  // }
+  console.log(111,cart);
+
   return (
-    <SafeAreaView style={{ width: "100%", height: "100 %" }}>
+    <SafeAreaView
+      style={{ width: "100%", height: "100 %", paddingHorizontal: 10 }}
+    >
       <ScrollView style={styles.container}>
-        <View style={styles.shippingAddress}>
-          <Text style={styles.titleShippingAddress}>Shipping address</Text>
-          <View style={styles.detail}>
-            <View style={styles.address}>
-              <Text style={styles.txtAddress}>
-                My Dinh, Nam Tu Liem, Ha Noi dasd sdw sds ewe sd sdsss ss dsds d
-                sdsd{" "}
-              </Text>
-            </View>
-            <View style={styles.detailAddress}>
-              <Text>abc, toa nha a, alo alo</Text>
+        <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
+          <View style={{ flex: 1 }}>
+            <Icon name="location-pin" color="#f94f30" type="evil-icons" />
+          </View>
+          <View style={styles.shippingAddress}>
+            <Text style={styles.titleShippingAddress}>Địa chỉ nhận hàng</Text>
+
+            <View style={styles.detail}>
+              <View style={styles.address}>
+                <Text style={styles.txtAddress}>
+                  {user?.name}
+                  {address?.main_address}
+                </Text>
+              </View>
+
+              <View style={styles.detailAddress}>
+                <Text>{address?.address_detail}</Text>
+              </View>
             </View>
           </View>
-
           <View style={styles.optionsAddress}>
             <TouchableOpacity
-              style={styles.btnChangeAddress}
               onPress={() => {
                 navigation.navigate("ListAddress");
               }}
             >
-              <Text style={styles.txtChangeAddress}>Change</Text>
+              <Icon name="arrow-forward-ios" />
             </TouchableOpacity>
           </View>
         </View>
 
+        <Divider orientation="horizontal" width={2} />
+
         <View style={styles.orderLines}>
           {cart.map((order) => (
             <View key={order.shop_id}>
-              <Text>{order.shop_id}</Text>
+              <Shop shop_id={order?.shop_id} />
               {order.order.map((product) => (
                 <OrderLine
                   key={product.data.id}
@@ -62,13 +81,42 @@ function Checkout({ route, navigation }) {
                   {...product.data}
                 />
               ))}
+              <Divider
+                orientation="horizontal"
+                width={2}
+                style={{ marginTop: 5 }}
+              />
             </View>
           ))}
         </View>
       </ScrollView>
+
+      <View style={styles.payMethod}>
+        <View style={{ flex: 1 }}>
+          <Icon name="dollar-sign" color="#f94f30" type="feather" />
+        </View>
+        <Text style={{ flex: 3 }}>Phương thức thanh toán</Text>
+        <Divider
+                    orientation="vertical"
+                    width={2}
+                    style={{ marginHorizontal: 3 }}
+                  />
+        <View style={{ flex: 4, flexDirection: "row" }}>
+          <Text>Thanh toán khi nhận hàng </Text>
+        </View>
+        <TouchableOpacity>
+          <Icon name="arrow-forward-ios" />
+        </TouchableOpacity>
+      </View>
       <View style={styles.bottom}>
-        <Text style={styles.totalTxt}>Total: 100000</Text>
-        <TouchableOpacity style={styles.checkoutBtn} activeOpacity="0.5">
+        <Text style={styles.totalTxt}>Total: {route?.params?.totalCart}</Text>
+        <TouchableOpacity
+          style={styles.checkoutBtn}
+          activeOpacity="0.5"
+          onPress={() => {
+            [navigation.navigate("OrderNavigation")];
+          }}
+        >
           <Text style={styles.checkoutTxt}>Confirm and Pay</Text>
         </TouchableOpacity>
       </View>
@@ -85,54 +133,28 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   shippingAddress: {
-    display: "flex",
     flexDirection: "column",
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    borderStyle: "solid",
-    borderColor: "#2529c5",
-    width: "100%",
-    height: 200,
-    borderWidth: 1,
-    marginTop: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    backgroundColor: "#ffffff",
+    paddingHorizontal: 15,
+    flex: 14,
   },
   titleShippingAddress: {
-    fontSize: 20,
+    fontSize: 15,
+    color: "orange",
     fontWeight: "bold",
   },
   detail: {
-    marginTop: 20,
-    display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
   },
-  address: {
-    width: 350,
-    height: 40,
-  },
+  address: {},
   txtAddress: {
     fontWeight: "bold",
   },
-  detailAddress: {
-    width: 350,
-    height: 20,
-  },
+  detailAddress: {},
   optionsAddress: {
     marginTop: 5,
-  },
-  btnChangeAddress: {
-    width: 100,
-    height: 30,
-    backgroundColor: "green",
-    borderRadius: 10,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
   },
   txtChangeAddress: {
     color: "white",
@@ -169,6 +191,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,
+  },
+  payMethod: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

@@ -9,42 +9,64 @@ import {
 import { ProductComponent } from "./ProductComponent";
 import { useEffect, useState, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import "abortcontroller-polyfill";
+import { salePrice } from "~/lib/ultis";
+import { Shop } from "./";
+import { Divider } from "react-native-elements";
 
 function Cart({ route, navigation }) {
   const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState();
+  let totalOrder = 0;
 
   useEffect(() => {
     AsyncStorage.getItem("@cart").then((res) => setCart(JSON.parse(res)));
-  }, [route.params?.carts]);
+  }, [route.params?.carts, totalOrder]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingHorizontal: 5 }}>
       <View style={{ flex: 12 }}>
         <ScrollView style={styles.container}>
-          {cart.map((order) => (
-            <View key={order.shop_id}>
-              <Text>{order.shop_id}</Text>
-              {order.order.map((product) => (
-                <ProductComponent
-                  key={product.data.id}
-                  quanlity={product.quanlity}
-                  {...product.data}
-                  navigation={navigation}
-                  loading={route.params?.carts}
+          {cart.map((order) => {
+            return (
+              <View key={order.shop_id}>
+                <Shop shop_id={order?.shop_id} />
+                {order.order.map((product) => {
+                  totalOrder +=
+                    salePrice(
+                      product.data.price,
+                      product.data.flash_sale_percent
+                    ) * product.quanlity;
+
+                  return (
+                    <ProductComponent
+                      key={product.data.id}
+                      quanlity={product.quanlity}
+                      {...product.data}
+                      navigation={navigation}
+                      loading={route.params?.carts}
+                    />
+                  );
+                })}
+                <Divider
+                  orientation="horizontal"
+                  width={2}
+                  style={{ marginTop: 5 }}
                 />
-              ))}
-            </View>
-          ))}
+              </View>
+            );
+          })}
         </ScrollView>
       </View>
       <View style={styles.bottom}>
-        <Text style={styles.totalTxt}>Total: 100000</Text>
+        <Text style={styles.totalTxt}>Total: {totalOrder}</Text>
         <TouchableOpacity
           style={styles.checkoutBtn}
           activeOpacity="0.5"
           onPress={() => {
-            navigation.navigate("Checkout", { carts: JSON.stringify(cart) });
+            navigation.navigate("Checkout", {
+              carts: JSON.stringify(cart),
+              totalCart: totalOrder,
+            });
           }}
         >
           <Text style={styles.checkoutTxt}>Checkout Now</Text>

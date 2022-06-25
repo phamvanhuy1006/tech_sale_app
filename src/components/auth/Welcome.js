@@ -1,21 +1,23 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, ImageBackground } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import i18n from "../../lib/lang/translations/i18n";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { stateLogin } from "~/lib/state";
 
 function Welcome({ navigation }) {
   const { t } = useTranslation();
 
-  if (stateLogin) {
-    navigation.navigate("Homenavigate");
-  }
+  // if (stateLogin) {
+  //   navigation.navigate("Homenavigate");
+  // }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      style={styles.container}
+      source={require("~/assets/background-welcome.jpg")}
+      resizeMode="cover"
+    >
       <Text style={{ fontSize: 24, fontWeight: "600", color: "#fff" }}>
         Welcome!
       </Text>
@@ -23,7 +25,7 @@ function Welcome({ navigation }) {
       <View style={styles.signin}>
         <Button
           color="#339900"
-          title={t("greeting")}
+          title="Đăng nhập"
           onPress={() => {
             navigation.navigate("Login");
           }}
@@ -32,14 +34,14 @@ function Welcome({ navigation }) {
       <View style={styles.signin}>
         <Button
           color="#ff33cc"
-          title="Sign Up"
+          title="Đăng ký"
           onPress={() => {
             navigation.navigate("Register");
             // handleLanguage('vi')
           }}
         />
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // width: '100%',
-    backgroundColor: "#9966ff",
+    // backgroundColor: "#9966ff",
     alignItems: "center",
     justifyContent: "center",
   },

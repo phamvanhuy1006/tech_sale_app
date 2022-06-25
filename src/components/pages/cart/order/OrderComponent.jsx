@@ -6,9 +6,11 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-
+import { salePrice } from "~/lib/ultis";
 import { Icon } from "react-native-elements";
 import { LineItem } from "./LineItem";
+import { OrderLine } from "../checkout";
+import { handleDeleteOrder } from "~/lib/ultis";
 
 const OrderComponent = ({
   isToPayTab,
@@ -27,6 +29,7 @@ const OrderComponent = ({
   price,
   rate,
   stock,
+  id_shop,
   quanlity,
   loading,
   navigation,
@@ -46,7 +49,7 @@ const OrderComponent = ({
     quanlity: quanlity,
     loading: loading,
     navigation: navigation,
-  }
+  };
 
   return (
     <ScrollView>
@@ -56,13 +59,14 @@ const OrderComponent = ({
             <Text style={styles.bold}>Code: {code}</Text>
           </View>
           <View style={isToPayTab == true ? styles.show : styles.hide}>
-            <TouchableOpacity style={styles.btnDelete}>
+            <TouchableOpacity
+              onPress={() => {
+                handleDeleteOrder(id, id_shop, navigation, "ToPay");
+              }}
+              style={styles.btnDelete}
+            >
               <Text style={styles.bold}>Cancel</Text>
-              <Icon
-                name='delete'
-                type='material-community'
-                color='red'
-              />
+              <Icon name="delete" type="material-community" color="red" />
             </TouchableOpacity>
           </View>
         </View>
@@ -72,19 +76,11 @@ const OrderComponent = ({
         </View>
         <View style={styles.middle}>
           <LineItem {...lineItemData} />
-          <LineItem {...lineItemData} />
-
-        </View>
-
-        <View style={styles.bottom}>
-          <Text style={styles.bold}>Total: {totalPrice}</Text>
-          <Text style={styles.bold}>{totalProduct} products</Text>
         </View>
       </View>
     </ScrollView>
-
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   hide: {
@@ -92,13 +88,13 @@ const styles = StyleSheet.create({
   },
   container: {
     minHeight: 400,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 20,
     marginTop: 10,
     padding: 10,
   },
   bold: {
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   top: {
     flex: 1,
@@ -109,8 +105,8 @@ const styles = StyleSheet.create({
   subTop: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 10,
   },
   btnDelete: {
@@ -118,7 +114,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
@@ -137,7 +133,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 10,
     padding: 5,
-  }
-})
+  },
+});
 
-export { OrderComponent }
+export { OrderComponent };

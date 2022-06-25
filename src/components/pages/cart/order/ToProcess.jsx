@@ -20,8 +20,6 @@ const ToProcess = () => {
 
   return (
     <ScrollView>
-      <OrderComponent {...data} />
-      <OrderComponent {...data} />
     </ScrollView>
   )
 }

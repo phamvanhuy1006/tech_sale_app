@@ -13,7 +13,6 @@ import { logout } from "~/lib";
 const Stack = createNativeStackNavigator();
 
 const Menu = ({ navigation, drawer }) => {
-  // console.log(navigation)
   return (
     <View style={[styles.container, styles.navigationContainer]}>
       <View style={styles.borderImage}>

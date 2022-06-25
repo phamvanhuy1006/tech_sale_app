@@ -9,30 +9,56 @@ import { Icon } from "react-native-elements";
 import { useEffect } from "react";
 import { useContext } from "react";
 import UserContext from "~/context/UserContext";
+import { deleteAddress } from "~/lib/api";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const AddressLine = () => {
+const AddressLine = (props) => {
+  const { address_detail, id, id_user, main_address, name, phone } = props;
   const user = useContext(UserContext);
+  const navigation = useNavigation();
+
+  const selectAddress = async () => {
+    await AsyncStorage.setItem("@address", JSON.stringify(props));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.detail}>
         <View style={styles.address}>
-          <Text style={styles.txtAddress}>
-            {user.main_address}
-          </Text>
+          <Text style={styles.txtAddress}>{main_address}</Text>
         </View>
         <View style={styles.detailAddress}>
-          <Text>abc, toa nha a, alo alo</Text>
+          <Text>{address_detail}</Text>
         </View>
       </View>
 
       <View style={styles.options}>
         <View>
-          <TouchableOpacity style={styles.btnSelect}>
+          <TouchableOpacity
+            style={styles.btnSelect}
+            onPress={() => {
+              selectAddress();
+            }}
+          >
             <Text style={styles.btnTxt}>Select</Text>
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.btnDelete}>
+          <TouchableOpacity
+            onPress={() => {
+              [
+                deleteAddress(id),
+                navigation.navigate("cartnavigation", {
+                  screen: "ListAddress",
+                  params: {
+                    loading: { loading: 1 },
+                  },
+                }),
+              ];
+            }}
+            style={styles.btnDelete}
+          >
             <Text style={styles.btnTxt}>Delete</Text>
           </TouchableOpacity>
         </View>
@@ -63,10 +89,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   detail: {
-    // flexDirection: "column",
-    // alignItems: "flex-start",
+    justifyContent: "flex-start",
+    flexDirection: "column",
+    width: "80%",
     // justifyContent: "center",
-    // backgroundColor: "yellow"
   },
   address: {
     // width: 350,

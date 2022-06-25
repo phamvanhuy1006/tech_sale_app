@@ -1,10 +1,8 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, ImageBackground } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
-import i18n from "../../lib/lang/translations/i18n";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { stateLogin } from "~/lib/state";
 
 function Welcome({ navigation }) {
@@ -15,7 +13,11 @@ function Welcome({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      style={styles.container}
+      source={require("~/assets/background-welcome.jpg")}
+      resizeMode="cover"
+    >
       <Text style={{ fontSize: 24, fontWeight: "600", color: "#fff" }}>
         Welcome!
       </Text>
@@ -39,7 +41,7 @@ function Welcome({ navigation }) {
           }}
         />
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // width: '100%',
-    backgroundColor: "#9966ff",
+    // backgroundColor: "#9966ff",
     alignItems: "center",
     justifyContent: "center",
   },

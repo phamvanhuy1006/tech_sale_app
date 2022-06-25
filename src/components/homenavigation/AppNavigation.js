@@ -44,7 +44,6 @@ function MyTabBar({ state, descriptors, navigation }) {
             target: route.key,
           });
 
-          console.log(111, event);
           setLoading(!loading);
 
           if (!isFocused && !event.defaultPrevented) {

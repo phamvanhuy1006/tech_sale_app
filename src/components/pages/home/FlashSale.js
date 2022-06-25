@@ -19,7 +19,7 @@ function FlashSale({ navigation }) {
 
   useEffect(() => {
     request
-      .get("/api/product")
+      .get("/api/product/flash_sale?limit=10")
       .then((response) => setProducts(response.data.data));
   }, []);
 

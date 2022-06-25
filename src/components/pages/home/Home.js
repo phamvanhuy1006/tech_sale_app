@@ -8,6 +8,7 @@ import { Show } from "../user/Show";
 import { Edit } from "../user/Edit";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ShowProduct } from "~/screen/product";
+import { ProductList } from "./Product/ProductList";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,12 @@ const HomeNavigation = () => {
       <Stack.Screen
         name="EditProfile"
         component={Edit}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="ProductList"
+        component={ProductList}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

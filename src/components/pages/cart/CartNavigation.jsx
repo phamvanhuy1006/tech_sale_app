@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Cart } from "./Cart";
 import { ShowProduct } from "~/screen/product";
 import { Checkout, ListAddress, RegisterAddress } from "./checkout";
+import { ToPay, ToProcess, OrderNavigation } from "./order";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +13,7 @@ const CartNavigation = () => {
       <Stack.Screen
         name="Checkout"
         component={Checkout}
-        // options={{ headerShown: false }}
+        options={{ title: "Thanh toán" }}
       />
       <Stack.Screen
         name="ListAddress"
@@ -32,6 +33,7 @@ const CartNavigation = () => {
           unmountOnBlur: true,
         }}
       />
+      <Stack.Screen name="OrderNavigation" options={{ title: "Đơn Mua" }} component={OrderNavigation} />
     </Stack.Navigator>
   );
 };

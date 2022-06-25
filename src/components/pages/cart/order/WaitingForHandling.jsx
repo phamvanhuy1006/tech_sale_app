@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-
 import { OrderComponent } from "./OrderComponent";
 
 const WaitingForHandling = () => {
@@ -20,8 +19,6 @@ const WaitingForHandling = () => {
 
   return (
     <ScrollView>
-      <OrderComponent {...data} />
-      <OrderComponent {...data} />
     </ScrollView>
   )
 }

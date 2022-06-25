@@ -36,13 +36,13 @@ const OrderLine = ({
           <Text style={styles.name}>{name}</Text>
         </View>
         <View>
-          <Text numberOfLines={1} style={styles.store}>Ten Cua Hang</Text>
+          <Text numberOfLines={1} style={styles.store}></Text>
         </View>
         <View style={styles.quantityAndPrice}>
           <Text style={styles.price}>
             Giá: {salePrice(price, flash_sale_percent)}
           </Text>
-          <Text style={styles.txtQuantity}>Quantity:{quanlity}</Text>
+          <Text style={styles.txtQuantity}>Số lượng:{quanlity}</Text>
         </View>
       </View>
     </View>
@@ -62,11 +62,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     backgroundColor: "#ffffff",
-    height: 200,
+    height: 100,
     paddingLeft: 5
   },
   image: {
-    width: 160,
+    width: 100,
     height: "80%",
     borderRadius: 10,
   },

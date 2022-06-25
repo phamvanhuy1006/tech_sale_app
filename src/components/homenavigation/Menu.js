@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   Image,
+  ImageBackground
 } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MenuNavigation } from "./MenuNavigation";
@@ -14,7 +15,11 @@ const Stack = createNativeStackNavigator();
 
 const Menu = ({ navigation, drawer }) => {
   return (
-    <View style={[styles.container, styles.navigationContainer]}>
+    <ImageBackground
+      source={require("~/assets/background-menu.jpg")}
+      resizeMode="cover"
+      style={[styles.container, styles.navigationContainer]}
+    >
       <View style={styles.borderImage}>
         <Image
           source={{ uri: "https://reactnative.dev/docs/assets/p_cat2.png" }}
@@ -66,11 +71,11 @@ const Menu = ({ navigation, drawer }) => {
           icon={{ name: "sign-out", type: "font-awesome" }}
           name="Sign Out"
           onPress={() => {
-            return [logout(), navigation.navigate("Login")]
+            return [logout(), navigation.navigate("Login")];
           }}
         />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 

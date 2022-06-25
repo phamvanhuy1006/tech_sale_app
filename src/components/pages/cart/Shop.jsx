@@ -14,9 +14,11 @@ export const Shop = (props) => {
   return (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <TouchableOpacity style={{ marginRight: 2 }}>
-        <Text style={{ color: "red" }}>Yêu thích</Text>
+        <Text style={{ color: "red", fontStyle: "italic", fontWeight: "bold" }}>
+          Yêu thích
+        </Text>
       </TouchableOpacity>
-      <Text style={{marginRight: 2}}>{shop?.shop_name}</Text>
+      <Text style={{ marginRight: 2, fontWeight: 'bold', fontSize: 14 }}>{shop?.shop_name}</Text>
       <TouchableOpacity>
         <Icon iconStyle={{}} size={12} name="arrow-forward-ios" />
       </TouchableOpacity>

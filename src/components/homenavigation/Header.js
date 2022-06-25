@@ -26,7 +26,17 @@ function Header({ drawer, navigation }) {
         <Icon name="reorder" type="" />
       </TouchableOpacity>
       <View style={{ flexDirection: "row", flex: 1 }}>
-        <TouchableOpacity style={{ flex: 1, alignItems: "flex-end" }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("cartnavigation", {
+              screen: "Search",
+              params: {
+                cart: 1,
+              },
+            });
+          }}
+          style={{ flex: 1, alignItems: "flex-end" }}
+        >
           <Icon name="search" type="" />
         </TouchableOpacity>
         <TouchableOpacity
@@ -35,14 +45,14 @@ function Header({ drawer, navigation }) {
               screen: "OrderNavigation",
               params: {
                 cart: 1,
-              },  
+              },
             });
           }}
           style={{ flex: 3 }}
         >
           <Icon name="cart-outline" color="#f94f30" type="material-community" />
           <Badge
-            value="99+"
+            value="3+"
             status="error"
             d5
             containerStyle={{ position: "absolute", top: -4, right: -4 }}

@@ -21,6 +21,7 @@ const TechApp = () => {
           component={Welcome}
           options={{
             title: "Welcome",
+            headerShown: false,
           }}
         />
 
@@ -28,7 +29,7 @@ const TechApp = () => {
           name="Login"
           component={Login}
           options={{
-            title: "Login",
+            title: "Đăng nhập",
           }}
         />
 

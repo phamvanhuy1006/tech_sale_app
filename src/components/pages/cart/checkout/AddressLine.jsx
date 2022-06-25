@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Alert
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { useEffect } from "react";
@@ -20,6 +21,7 @@ const AddressLine = (props) => {
 
   const selectAddress = async () => {
     await AsyncStorage.setItem("@address", JSON.stringify(props));
+    Alert.alert("Đã chọn địa chỉ này")
   };
 
   return (
@@ -38,7 +40,15 @@ const AddressLine = (props) => {
           <TouchableOpacity
             style={styles.btnSelect}
             onPress={() => {
-              selectAddress();
+              [
+                selectAddress(),
+                navigation.navigate("cartnavigation", {
+                  screen: "ListAddress",
+                  params: {
+                    loading: { loading: 1 },
+                  },
+                }),
+              ];
             }}
           >
             <Text style={styles.btnTxt}>Select</Text>

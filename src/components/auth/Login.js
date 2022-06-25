@@ -61,17 +61,17 @@ function Login({ navigation }) {
           color: "#fff",
         }}
       >
-        Login
+        Đăng nhập
       </Text>
       <TextInput
         style={styles.input}
-        placeholder="Email Address"
+        placeholder="Nhập địa chỉ email"
         onChangeText={(text) => setEmail(text)}
         defaultValue={email}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="Mật khẩu"
         secureTextEntry={true}
         autoCorrect={false}
         password={true}
@@ -93,7 +93,7 @@ function Login({ navigation }) {
           }}
         >
           <Text style={{ color: "white", fontSize: 18, paddingVertical: 3 }}>
-            Login
+            Đăng nhập
           </Text>
         </TouchableOpacity>
       </View>
@@ -104,7 +104,7 @@ function Login({ navigation }) {
         }}
       >
         <Text style={{ textDecorationLine: "underline", color: "yellow" }}>
-          ForgotPassword
+          Quên mật khẩu
         </Text>
       </TouchableOpacity>
       <View

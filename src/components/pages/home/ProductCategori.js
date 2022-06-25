@@ -40,7 +40,7 @@ const ProCategori = (props) => {
 function ProductCategori() {
   return (
     <View style={styles.box}>
-      <Text style={styles.title}>Products Categori</Text>
+      <Text style={styles.title}>Loại sản phẩm</Text>
 
       <View style={styles.flex}>
         <ProCategori
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginTop: "3%",
+    color: 'orange'
   },
 
   flex: {

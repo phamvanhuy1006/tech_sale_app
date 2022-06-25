@@ -26,6 +26,10 @@ export const handleDeleteOrder = async (
 
       if (indexOrder !== -1) {
         cart[indexShop].order.splice(indexOrder, 1);
+        console.log(111, cart[indexShop].order);
+        // if (!cart[indexShop].order[0].id) {
+        //   cart.splice(indexShop, 1);
+        // }
       }
       jsonCart = JSON.stringify(cart);
       await AsyncStorage.setItem("@cart", jsonCart);

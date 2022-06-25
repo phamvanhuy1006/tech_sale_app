@@ -8,9 +8,9 @@ import { stateLogin } from "~/lib/state";
 function Welcome({ navigation }) {
   const { t } = useTranslation();
 
-  if (stateLogin) {
-    navigation.navigate("Homenavigate");
-  }
+  // if (stateLogin) {
+  //   navigation.navigate("Homenavigate");
+  // }
 
   return (
     <ImageBackground
@@ -25,7 +25,7 @@ function Welcome({ navigation }) {
       <View style={styles.signin}>
         <Button
           color="#339900"
-          title={t("greeting")}
+          title="Đăng nhập"
           onPress={() => {
             navigation.navigate("Login");
           }}
@@ -34,7 +34,7 @@ function Welcome({ navigation }) {
       <View style={styles.signin}>
         <Button
           color="#ff33cc"
-          title="Sign Up"
+          title="Đăng ký"
           onPress={() => {
             navigation.navigate("Register");
             // handleLanguage('vi')

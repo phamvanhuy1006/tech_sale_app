@@ -17,7 +17,7 @@ function TopProduct({ navigation }) {
 
   return (
     <View style={styles.box}>
-      <Text style={styles.title}>Top Product</Text>
+      <Text style={styles.title}>Sản phẩm nổi bật</Text>
       <View style={styles.buttonView}></View>
 
       <View style={styles.row}>
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginTop: "3%",
+    color: 'orange'
   },
 
   row: {

@@ -20,8 +20,7 @@ function Cart({ route, navigation }) {
 
   useEffect(() => {
     AsyncStorage.getItem("@cart").then((res) => setCart(JSON.parse(res)));
-  }, [route.params?.carts]);
-
+  }, [route.params?.carts, totalOrder]);
 
   return (
     <SafeAreaView style={{ flex: 1, paddingHorizontal: 5 }}>
@@ -32,10 +31,11 @@ function Cart({ route, navigation }) {
               <View key={order.shop_id}>
                 <Shop shop_id={order?.shop_id} />
                 {order.order.map((product) => {
-                  totalOrder += salePrice(
-                    product.data.price,
-                    product.data.flash_sale_percent
-                  );
+                  totalOrder +=
+                    salePrice(
+                      product.data.price,
+                      product.data.flash_sale_percent
+                    ) * product.quanlity;
 
                   return (
                     <ProductComponent

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView,Text } from "react-native";
 import { ProductCategori } from "./ProductCategori";
 import { FlashSale } from "./FlashSale";
 import { TopProduct } from "./TopProduct";
@@ -9,6 +9,7 @@ import { Edit } from "../user/Edit";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ShowProduct } from "~/screen/product";
 import { ProductList } from "./Product/ProductList";
+import SearchProduct from "../../SearchProduct";
 
 const Stack = createNativeStackNavigator();
 
